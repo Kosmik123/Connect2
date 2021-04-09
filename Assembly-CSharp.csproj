@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\CreaturesSettings.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\Settings.cs" />
+    <Compile Include="Assets\Scripts\SpriteColorChanger.cs" />
     <Compile Include="Assets\Scripts\UI\IndicatorController.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Reference Include="Unity.Timeline.Editor">

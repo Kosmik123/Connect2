@@ -59,8 +59,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public static GameController main;
-    
+    public static GameController main;    
 
     [Header("To Link")]
     public GameObject creaturePrefab;
@@ -75,6 +74,9 @@ public class GameController : MonoBehaviour
     public CreatureData[] creatures;
     public string saveFile = "";
 
+    // Price
+    long price1, price = 1;
+
 
     private void Awake()
     {
@@ -87,12 +89,31 @@ public class GameController : MonoBehaviour
     {
         ui = UIController.main;
         settings = Settings.main;
+
+        string filepath = Application.persistentDataPath + "/" + settings.savefileName;
+        if (File.Exists(filepath))
+            LoadGame();
     }
 
     // Update is called once per frame
     void Update()
     {
         ui.money = money;
+        ui.price = price;
+    }
+
+
+    public void BuyCreature()
+    {
+        if (money < price)
+            return;
+
+        CreateCreature();
+        money -= price;
+
+        long newPrice = price + price1;
+        price1 = price;
+        price = newPrice;
     }
 
     public void CreateCreature(int lv = 0)
@@ -163,5 +184,13 @@ public class GameController : MonoBehaviour
         return result;
     }
 
+    private IEnumerator RegularSaveGame()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(10);
+            SaveGame();
+        }
+    }
 
 }
