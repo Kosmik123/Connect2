@@ -16,6 +16,8 @@ public class CreatureData : MonoBehaviour
 
     [Header("States")]
     public int level; // from 0 to maxLevel
+    public bool isMoving;
+
 
     private void Awake()
     {
@@ -42,6 +44,7 @@ public class CreatureData : MonoBehaviour
 
     public void LevelUp()
     {
+        isMoving = false;
         level += 1;
         Refresh();
     }

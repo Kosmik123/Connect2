@@ -131,7 +131,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.35
+  m_Radius: 0.3
 --- !u!114 &4445843481878896654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +147,7 @@ MonoBehaviour:
   renderer: {fileID: 4445843481300146641}
   collider: {fileID: 0}
   level: 0
+  isMoving: 0
 --- !u!111 &4445843481878896655
 Animation:
   m_ObjectHideFlags: 0
@@ -194,19 +195,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.01
-  movementRange:
-    serializedVersion: 2
-    x: -2.5
-    y: -4.6
-    width: 5
-    height: 9.2
-  isMoving: 0
   targetPosition: {x: 0, y: 0, z: 0}
   isDragged: 0
-  relativePos: {x: 0, y: 0, z: 0}
   touchedColliders:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  isConnecting: 0

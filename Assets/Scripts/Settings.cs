@@ -16,6 +16,9 @@ public class Settings : MonoBehaviour
     public string textureName;
     public Sprite[] spritesByLevel;
 
+    [Header("Other")]
+    public string savefileName;
+
     private void Awake()
     {
         main = this;
@@ -27,10 +30,7 @@ public class Settings : MonoBehaviour
         CreatureData.scaleCurve = scaleByLevel;
         CreatureData.maxLevel = maxLevel;        
         
-        
         CreatureController.movementRange = creaturesArea;
-
-    
     }
 
     void MakeRandomSpriteArray()

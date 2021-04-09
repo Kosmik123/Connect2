@@ -1,46 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(CreatureData))]
 public class CreatureController : MonoBehaviour
 {
     public static Rect movementRange;
 
-
-
+    //TO LINK
     private CreatureData creature;
-    
+    private Animator animator;
+    private GameController gameController;
+
     [Header("Properties")]
     [Range(0,1)]
     public float moveSpeed;
     
     [Header("Movement States")]
-    public bool isMoving;
     public Vector3 targetPosition;
 
     [Header("States")]
     public bool isDragged;
-    public Vector3 relativePos;
-    public Collider2D[] touchedColliders = new Collider2D[5];
+    private Vector3 relativePos;
+    public Collider2D[] touchedColliders = new Collider2D[1];
+
+    public bool isConnecting;
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         creature = GetComponent<CreatureData>();
     }
 
     void Start()
     {
+        gameController = GameController.main;
         StartCoroutine("MoveRandomlyCo");
     }
 
     void Update()
     {
-        if (isMoving)
+        if (creature.isMoving)
             DoMove();
 
         if (isDragged)
             DoDrag();
+
+        animator.SetBool("Moving", creature.isMoving);
     }
 
     IEnumerator MoveRandomlyCo()
@@ -48,7 +55,7 @@ public class CreatureController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(2f, 8f));
-            if(!isMoving && !isDragged)
+            if(!creature.isMoving && !isDragged && creature.level > 0)
                 StartRandomMove();
         }
     }
@@ -58,30 +65,44 @@ public class CreatureController : MonoBehaviour
         targetPosition = new Vector3(
             Random.Range(movementRange.xMin, movementRange.xMax),
             Random.Range(movementRange.yMin, movementRange.yMax));
-        isMoving = true;
+        creature.isMoving = true;
     }
+
+    public void StartMoveToTarget(Vector3 targetPos)
+    {
+        targetPosition = targetPos;
+        creature.isMoving = true;
+    }
+
 
     void DoMove()
     {
-        if (isMoving)
-        {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed);
-            if ((transform.position - targetPosition).sqrMagnitude < 0.01f)
-                isMoving = false;
-        }
+        transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed);
+        if ((transform.position - targetPosition).sqrMagnitude < 0.1f)
+            creature.isMoving = false;
     }
 
     void DoDrag()
     {
-        transform.position = relativePos + Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //relativePos = Vector3.Lerp(relativePos, Vector3.zero, 0.1f);
+        transform.position = relativePos + 
+            Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
 
     private void OnMouseDown()
     {
-        relativePos = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        isMoving = false;
+        relativePos = transform.position - 
+            Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        creature.isMoving = false;
         isDragged = true;
+    }
+
+    private void OnMouseUpAsButton()
+    {
+        creature.isMoving = false;
+        gameController.AddMoney(creature);
+        animator.SetTrigger("Shake");
     }
 
     private void OnMouseUp()
@@ -90,17 +111,23 @@ public class CreatureController : MonoBehaviour
 
         touchedColliders = new Collider2D[1];
         creature.collider.OverlapCollider(new ContactFilter2D(), touchedColliders);
-        if(touchedColliders[0] != null)
+        if(touchedColliders.Length > 0)
         {
-            var otherCreature = touchedColliders[0].GetComponent<CreatureData>();
-            if(otherCreature != null && otherCreature.level == creature.level) 
+            for (int i = 0; i < touchedColliders.Length; i++)
             {
-                Destroy(gameObject);
-                otherCreature.LevelUp();
-                otherCreature.gameObject.name = "Creature " + otherCreature.level;
+                if (touchedColliders[i] != null)
+                {
+                    var otherCreature = touchedColliders[i].GetComponent<CreatureData>();
+                    if (otherCreature != null && otherCreature.level == creature.level)
+                    {
+                        Destroy(gameObject);
+                        otherCreature.LevelUp();
+                        otherCreature.gameObject.name = "Creature " + otherCreature.level;
+                        break;
+                    }
+                }
             }
         }            
     }
-
 }
 
