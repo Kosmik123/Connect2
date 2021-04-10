@@ -1,105 +1,66 @@
-﻿using System.IO;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GameController : MonoBehaviour
 {
-    public class Money
-    {
-        public static char[] prefixes = {'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'};
-        public const int HIGH_NUMBER = 1000000000;
-
-        public int[] units = new int[3];
-
-        public Money()
-        {
-        }
-
-
-        public string ToString()
-        {
-            string result = "";
-            string prefix = "";
-            int highestNumber;
-
-            int prefixIndexReversed = 1;
-            for (int j = units.Length-1; j >= 0; j--)
-            {
-                highestNumber = HIGH_NUMBER;
-                for (int i = 0; i < 3; i++)
-                { 
-                    if (units[j] >= highestNumber)
-                    {
-                        
-                    }
-                            
-                            
-                }
-
-
-
-            }
-
-
-
-
-            return result;
-        }
-
-        public void Add()
-        {
-
-            Calculate();
-        }
-
-        private void Calculate()
-        {
-
-        }
-    }
-
     public static GameController main;    
 
     [Header("To Link")]
     public GameObject creaturePrefab;
     public Transform creaturesContainer;
-    
+
+    private SaveManager saveManager;
     private UIController ui;
     private Settings settings;
     private string savefileName;
 
     [Header("States")]
-    public long money;
+    public decimal money, incomeSpeed;
     public CreatureData[] creatures;
     public string saveFile = "";
+    private decimal price1 = 1, price = 0;
 
-    // Price
-    long price1, price = 1;
-
+    [Header("Bonuses")]
+    public decimal globalBonus;
+    public decimal[] creatureMultipliers;
 
     private void Awake()
     {
         main = this;
+        saveManager = GetComponent<SaveManager>();
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         ui = UIController.main;
         settings = Settings.main;
 
-        string filepath = Application.persistentDataPath + "/" + settings.savefileName;
-        if (File.Exists(filepath))
-            LoadGame();
+        LoadGame();
+        StartCoroutine("RegularSaveGameCo");
+        StartCoroutine("UpdateIncomeSpeed");
+
+        creatureMultipliers = new decimal[settings.spritesByLevel.Length];
+        for(int i = 0; i < creatureMultipliers.Length; i++)
+            creatureMultipliers[i] = 1;
     }
 
-    // Update is called once per frame
     void Update()
     {
         ui.money = money;
         ui.price = price;
+    }
+
+    IEnumerator UpdateIncomeSpeed()
+    {
+        while(true)
+        {
+            decimal lastMoney = money;
+            yield return new WaitForSeconds(1);
+            incomeSpeed = money - lastMoney;
+            ui.incomeSpeed = incomeSpeed;
+        }
     }
 
 
@@ -111,7 +72,7 @@ public class GameController : MonoBehaviour
         CreateCreature();
         money -= price;
 
-        long newPrice = price + price1;
+        decimal newPrice = price + price1;
         price1 = price;
         price = newPrice;
     }
@@ -128,26 +89,27 @@ public class GameController : MonoBehaviour
 
     public void AddMoney(CreatureData creature)
     {
-        long income = Mathf.RoundToInt(Mathf.Pow(2, creature.level+1)) - creature.level ;
+        decimal income = GetIncome(creature.level);
         ui.ShowIncome(income, creature.transform.position);
-        money += income;
+        money += (income);
+    }
+
+    private decimal GetIncome(int creatureLevel)
+    {
+        return (Mathf.RoundToInt(Mathf.Pow(2, 2*creatureLevel)) + creatureLevel
+            + globalBonus) * creatureMultipliers[creatureLevel];
     }
 
     public void SaveGame()
     {
         string save = "";
+        save += money.ToString() + "\n";
         creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
         foreach (var creature in creatures)
             save += creature.level + ",";
         saveFile = save.Substring(0, save.Length-1);
 
-        WriteSaveFile(saveFile);
-    }
-
-    public void WriteSaveFile(string contents)
-    {
-        string filepath = Application.persistentDataPath + "/" + settings.savefileName;
-        File.WriteAllText(filepath, contents);        
+        saveManager.WriteSaveFile(saveFile);
     }
 
     public void LoadGame()
@@ -156,22 +118,21 @@ public class GameController : MonoBehaviour
         foreach (var creature in creatures)
             Destroy(creature.gameObject);
 
-        saveFile = ReadSaveFile();
-
-        string[] levels = saveFile.Split(',');
-        foreach (var lv in levels)
+        saveFile = saveManager.ReadSaveFile();
+        if (saveFile.Contains("\n"))
         {
-            int level = IntParseFast(lv);
-            CreateCreature(level);
+            string[] parts = saveFile.Split('\n');
+            money = DecimalParseFast(parts[0]);
+            string[] levels = parts[1].Split(',');
+
+
+            foreach (var lv in levels)
+            {
+                int level = IntParseFast(lv);
+                CreateCreature(level);
+            }
         }
     }
-
-    public string ReadSaveFile()
-    {
-        string filepath = Application.persistentDataPath + "/" + settings.savefileName;
-        return File.ReadAllText(filepath);
-    }
-
 
     public static int IntParseFast(string value)
     {
@@ -184,13 +145,24 @@ public class GameController : MonoBehaviour
         return result;
     }
 
-    private IEnumerator RegularSaveGame()
+    public static decimal DecimalParseFast(string value)
+    {
+        decimal result = 0;
+        for (int i = 0; i < value.Length; i++)
+        {
+            char letter = value[i];
+            result = (10 * result) + (letter - 48);
+        }
+        return result;
+    }
+
+    private IEnumerator RegularSaveGameCo()
     {
         while (true)
         {
-            yield return new WaitForSeconds(10);
+            yield return new WaitForSeconds(5);
+            Debug.Log("Zapisywanie");
             SaveGame();
         }
     }
-
 }

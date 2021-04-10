@@ -63,12 +63,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\BuyWindowController.cs" />
     <Compile Include="Assets\Scripts\CreatureController.cs" />
     <Compile Include="Assets\Scripts\CreatureData.cs" />
     <Compile Include="Assets\Scripts\CreaturesSettings.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\Money.cs" />
+    <Compile Include="Assets\Scripts\SaveManager.cs" />
     <Compile Include="Assets\Scripts\Settings.cs" />
-    <Compile Include="Assets\Scripts\SpriteColorChanger.cs" />
+    <Compile Include="Assets\Scripts\UI\BuyButtonController.cs" />
     <Compile Include="Assets\Scripts\UI\IndicatorController.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Reference Include="Unity.Timeline.Editor">

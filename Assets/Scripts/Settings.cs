@@ -16,9 +16,6 @@ public class Settings : MonoBehaviour
     public string textureName;
     public Sprite[] spritesByLevel;
 
-    [Header("Other")]
-    public string savefileName;
-
     private void Awake()
     {
         main = this;

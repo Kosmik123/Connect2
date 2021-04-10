@@ -12,33 +12,57 @@ public class UIController : MonoBehaviour
     public GameObject incomeIndicatorPrefab;
     
     public Text moneyIndicator;
+    public Text speedIndicator;
     public Text priceIndicator;
 
-    public long money;
-    public long price;
+    public decimal money, incomeSpeed;
+    public decimal price;
 
     private void Awake()
     {
         main = this;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        moneyIndicator.text = money.ToString() + "$";
-        priceIndicator.text = price.ToString() + "$";
+        moneyIndicator.text = AlteredStringForm(money) + "$";
+        speedIndicator.text = AlteredStringForm(incomeSpeed) + "$/s";
+        priceIndicator.text = AlteredStringForm(price) + "$";
     }
 
-    public void ShowIncome(long amount, Vector3 position)
+    public void ShowIncome(decimal income, Vector3 position)
     {
         var indicator = Instantiate(incomeIndicatorPrefab, worldCanvas);
         indicator.transform.position = position;
-        indicator.GetComponentInChildren<Text>().text = "+" + amount.ToString() + "$";
+
+
+        indicator.GetComponentInChildren<Text>().text = "+" + AlteredStringForm(income) + "$";
     }
+
+    public static string AlteredStringForm(decimal number, string separator = "")
+    {
+        int lastIndex = 0;
+        decimal alteredNumber = number;
+        for (int i = 1; i < Money.prefixes.Length; i++)
+        {
+            if (number < (decimal)System.Math.Pow(Money.HIGH_NUMBER, i))
+            {
+                lastIndex = i - 1;
+                alteredNumber = number / (decimal)System.Math.Pow(Money.HIGH_NUMBER, lastIndex);
+                break;
+            }
+        }
+
+        string alteredString = alteredNumber.ToString();
+        int maxLength = Mathf.Min(5, alteredNumber.ToString().Length);
+
+        return alteredString.Substring(0,maxLength) + separator + Money.prefixes[lastIndex].shortName;
+    }
+
+
 }
