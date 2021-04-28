@@ -1,40 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public abstract class Buyable
-{
-    public Sprite sprite;
-    public string name;
-    public string description;
-    public decimal price;
-    public int grade;
-}
-
-public class BuyableCreature : Buyable
-{
-    public int creatureLevel;
-}
-
-public class BuyableUpgrade : Buyable
-{
-    public int upgradedCreatureLevel;
-}
+using UnityEngine.UI;
 
 
 
 public class BuyButtonController : MonoBehaviour
 {
+    [Header("To Link")]
+    public Text nameText;
+    public Text descriptionText;
+    public Image graphicImage;
 
+    [Header("Settings")]
+    public Buyable product;
 
-
-    void Start()
+    private void Awake()
     {
-        
     }
 
-    void Update()
+
+    public void Refresh()
     {
-        
+        nameText.text = product.name + " (" +
+            UIController.AlteredStringForm(product.price) + ")";
+        descriptionText.text = product.description;
+        graphicImage.sprite = product.sprite;
     }
+
+
 }

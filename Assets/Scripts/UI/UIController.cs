@@ -15,6 +15,9 @@ public class UIController : MonoBehaviour
     public Text speedIndicator;
     public Text priceIndicator;
 
+    public ShopWindowController upgradesWindow;
+    public ShopWindowController creaturesWindow;
+
     public decimal money, incomeSpeed;
     public decimal price;
 
@@ -32,7 +35,7 @@ public class UIController : MonoBehaviour
     {
         moneyIndicator.text = AlteredStringForm(money) + "$";
         speedIndicator.text = AlteredStringForm(incomeSpeed) + "$/s";
-        priceIndicator.text = AlteredStringForm(price) + "$";
+        //priceIndicator.text = AlteredStringForm(price) + "$";
     }
 
     public void ShowIncome(decimal income, Vector3 position)
@@ -50,10 +53,10 @@ public class UIController : MonoBehaviour
         decimal alteredNumber = number;
         for (int i = 1; i < Money.prefixes.Length; i++)
         {
-            if (number < (decimal)System.Math.Pow(Money.HIGH_NUMBER, i))
+            if (number < Money.DecimalPow(Money.HIGH_NUMBER, i))
             {
                 lastIndex = i - 1;
-                alteredNumber = number / (decimal)System.Math.Pow(Money.HIGH_NUMBER, lastIndex);
+                alteredNumber = number / Money.DecimalPow(Money.HIGH_NUMBER, lastIndex);
                 break;
             }
         }
@@ -62,6 +65,18 @@ public class UIController : MonoBehaviour
         int maxLength = Mathf.Min(5, alteredNumber.ToString().Length);
 
         return alteredString.Substring(0,maxLength) + separator + Money.prefixes[lastIndex].shortName;
+    }
+
+    public void ShowWindow(ShopWindowController window)
+    {
+        CreatureController.canCreturesBeMoved = false;
+        window.gameObject.SetActive(true);
+    }
+
+    public void HideWindow(ShopWindowController window)
+    {
+        CreatureController.canCreturesBeMoved = true;
+        window.gameObject.SetActive(false);
     }
 
 

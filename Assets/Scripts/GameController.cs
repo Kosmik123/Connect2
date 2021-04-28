@@ -14,12 +14,10 @@ public class GameController : MonoBehaviour
     private SaveManager saveManager;
     private UIController ui;
     private Settings settings;
-    private string savefileName;
 
     [Header("States")]
     public decimal money, incomeSpeed;
     public CreatureData[] creatures;
-    public string saveFile = "";
     private decimal price1 = 1, price = 0;
 
     [Header("Bonuses")]
@@ -29,40 +27,51 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         main = this;
+        settings = Settings.main;
+        settings.MakeSpritesArray();
+
         saveManager = GetComponent<SaveManager>();
+
+        LoadGame();
+        RecalculateIncomeSpeed();
+
+        creatureMultipliers = new decimal[settings.spritesByLevel.Length];
+        for (int i = 0; i < creatureMultipliers.Length; i++)
+            creatureMultipliers[i] = 1;
+
     }
 
     void Start()
     {
         ui = UIController.main;
-        settings = Settings.main;
-
-        LoadGame();
         StartCoroutine("RegularSaveGameCo");
         StartCoroutine("UpdateIncomeSpeed");
-
-        creatureMultipliers = new decimal[settings.spritesByLevel.Length];
-        for(int i = 0; i < creatureMultipliers.Length; i++)
-            creatureMultipliers[i] = 1;
     }
 
     void Update()
     {
         ui.money = money;
         ui.price = price;
+        ui.incomeSpeed = incomeSpeed;
     }
 
     IEnumerator UpdateIncomeSpeed()
     {
         while(true)
         {
-            decimal lastMoney = money;
-            yield return new WaitForSeconds(1);
-            incomeSpeed = money - lastMoney;
-            ui.incomeSpeed = incomeSpeed;
+            if (incomeSpeed < 100 && incomeSpeed > 0)
+            {
+                yield return new WaitForSeconds((float) (1 / incomeSpeed));
+                money += 1;
+            }
+            else 
+            {
+                yield return new WaitForSeconds(0.1f);
+                money += incomeSpeed / 10;
+            }
+
         }
     }
-
 
     public void BuyCreature()
     {
@@ -87,7 +96,7 @@ public class GameController : MonoBehaviour
         creatureObj.GetComponent<CreatureData>().level = lv;
     }
 
-    public void AddMoney(CreatureData creature)
+    public void AddMoneyFromCreature(CreatureData creature)
     {
         decimal income = GetIncome(creature.level);
         ui.ShowIncome(income, creature.transform.position);
@@ -96,41 +105,70 @@ public class GameController : MonoBehaviour
 
     private decimal GetIncome(int creatureLevel)
     {
-        return (Mathf.RoundToInt(Mathf.Pow(2, 2*creatureLevel)) + creatureLevel
+        return (Money.DecimalPow(2, creatureLevel) + creatureLevel
             + globalBonus) * creatureMultipliers[creatureLevel];
+    }
+
+    private decimal GetIncomeSpeed(int creatureLevel)
+    {
+        return Money.DecimalPow(2, creatureLevel) - 1;
+    }
+
+    public void RecalculateIncomeSpeed()
+    {
+        incomeSpeed = 0;
+        creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
+        foreach (var creature in creatures)
+            incomeSpeed += GetIncomeSpeed(creature.level);
     }
 
     public void SaveGame()
     {
-        string save = "";
-        save += money.ToString() + "\n";
-        creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
-        foreach (var creature in creatures)
-            save += creature.level + ",";
-        saveFile = save.Substring(0, save.Length-1);
+        SaveData save = new SaveData();
+        save.spritesOrder = settings.GetSpritesOrder();
+        save.money = money;
 
-        saveManager.WriteSaveFile(saveFile);
+        creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
+        int maxLevel = 0;
+        foreach(var creature in creatures)
+        {
+            if (creature.level > maxLevel)
+                maxLevel = creature.level;
+        }
+
+        int[] creaturesCounts = new int[maxLevel + 1];
+        foreach (var creature in creatures)
+            creaturesCounts[creature.level]++;
+        save.creatures = creaturesCounts;
+
+        saveManager.WriteSaveFile(save);
     }
 
     public void LoadGame()
     {
-        CreatureData[] creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
-        foreach (var creature in creatures)
-            Destroy(creature.gameObject);
-
-        saveFile = saveManager.ReadSaveFile();
-        if (saveFile.Contains("\n"))
+        SaveData save = saveManager.ReadSaveFile();
+        if (save != null)
         {
-            string[] parts = saveFile.Split('\n');
-            money = DecimalParseFast(parts[0]);
-            string[] levels = parts[1].Split(',');
+            money = save.money;
 
+            CreatureData[] creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
+            if (creatures != null) foreach (var creature in creatures)
+                    Destroy(creature.gameObject);
 
-            foreach (var lv in levels)
+            int unlockedLevels = save.creatures.Length;
+            for (int lv = 0; lv < unlockedLevels; lv++)
             {
-                int level = IntParseFast(lv);
-                CreateCreature(level);
+                int creaturesCount = save.creatures[lv];
+                for (int i = 0; i < creaturesCount; i++)
+                {
+                    CreateCreature(lv);
+                }
             }
+            settings.MakeSpritesArray(save.spritesOrder);
+        }
+        else
+        {
+            settings.MakeSpritesArray();
         }
     }
 
@@ -140,6 +178,8 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < value.Length; i++)
         {
             char letter = value[i];
+            if (letter < 48 || letter > 57)
+                break;
             result = 10 * result + (letter - 48);
         }
         return result;
@@ -151,6 +191,8 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < value.Length; i++)
         {
             char letter = value[i];
+            if (letter < 48 || letter > 57)
+                break;
             result = (10 * result) + (letter - 48);
         }
         return result;
@@ -160,9 +202,15 @@ public class GameController : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(10);
             Debug.Log("Zapisywanie");
             SaveGame();
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveGame();
+        Debug.Log("Application ending after " + Time.time + " seconds");
     }
 }

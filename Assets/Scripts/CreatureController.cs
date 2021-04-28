@@ -7,9 +7,11 @@ using UnityEngine.Events;
 public class CreatureController : MonoBehaviour
 {
     public static Rect movementRange;
+    public static bool canCreturesBeMoved = true;
 
     //TO LINK
-    private CreatureData creature;
+    [HideInInspector]
+    public CreatureData creature;
     private Animator animator;
     private GameController gameController;
 
@@ -83,7 +85,7 @@ public class CreatureController : MonoBehaviour
     }
 
     void DoDrag()
-    {
+    { 
         //relativePos = Vector3.Lerp(relativePos, Vector3.zero, 0.1f);
         transform.position = relativePos + 
             Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -92,17 +94,23 @@ public class CreatureController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        relativePos = transform.position - 
+        if (canCreturesBeMoved)
+        {
+            relativePos = transform.position -
             Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        creature.isMoving = false;
-        isDragged = true;
+            creature.isMoving = false;
+            isDragged = true;
+        }
     }
 
     private void OnMouseUpAsButton()
     {
-        creature.isMoving = false;
-        gameController.AddMoney(creature);
-        animator.SetTrigger("Shake");
+        if (canCreturesBeMoved)
+        {
+            creature.isMoving = false;
+            gameController.AddMoneyFromCreature(creature);
+            animator.SetTrigger("Shake");
+        }
     }
 
     private void OnMouseUp()
@@ -127,7 +135,9 @@ public class CreatureController : MonoBehaviour
                     }
                 }
             }
-        }            
+        }
+        gameController.RecalculateIncomeSpeed();
+
     }
 }
 

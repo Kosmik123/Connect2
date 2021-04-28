@@ -16,10 +16,12 @@ public class Settings : MonoBehaviour
     public string textureName;
     public Sprite[] spritesByLevel;
 
+    private Sprite[] sprites;
+
     private void Awake()
     {
         main = this;
-        MakeRandomSpriteArray();
+        sprites = Resources.LoadAll<Sprite>(textureName);
     }
 
     private void Start()
@@ -30,25 +32,60 @@ public class Settings : MonoBehaviour
         CreatureController.movementRange = creaturesArea;
     }
 
-    void MakeRandomSpriteArray()
+    public void MakeSpritesArray(int[] spritesOrder = null)
     {
-        Sprite[] sprites = Resources.LoadAll<Sprite>(textureName);
+        if(sprites == null)
+            sprites = Resources.LoadAll<Sprite>(textureName);
         spritesByLevel = new Sprite[sprites.Length];
 
-        List<int> indexes = new List<int>();
-        for(int i = 0; i < sprites.Length; i++)
-        {
-            indexes.Add(i);
-        }
 
-        for(int i = 0; i < spritesByLevel.Length; i++)
+        if (spritesOrder == null || spritesOrder.Length < 1)
         {
-            int index = Random.Range(0, indexes.Count);
-            int sprIndex = indexes[index];
-            indexes.RemoveAt(index);
-            spritesByLevel[i] = sprites[sprIndex];
+            List<int> indexes = new List<int>();
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                indexes.Add(i);
+            }
+
+            for (int i = 0; i < spritesByLevel.Length; i++)
+            {
+                int index = Random.Range(0, indexes.Count);
+                int sprIndex = indexes[index];
+                indexes.RemoveAt(index);
+                spritesByLevel[i] = sprites[sprIndex];
+            }
+        }
+        else
+        {
+            for(int lv = 0; lv < spritesOrder.Length; lv++)
+            {
+                int spriteRef = spritesOrder[lv];
+                spritesByLevel[lv] = sprites[spriteRef];
+            }    
         }
     }
+
+    public int[] GetSpritesOrder()
+    {
+        if (sprites == null)
+            sprites = Resources.LoadAll<Sprite>(textureName);
+
+        int[] order = new int[spritesByLevel.Length];
+        for(int lv = 0; lv < spritesByLevel.Length; lv++)
+        {
+            for(int i = 0; i < sprites.Length; i++)
+            {
+                if(spritesByLevel[lv] == sprites[i])
+                {
+                    order[lv] = i;
+                    break;
+                }
+            }
+        }
+
+        return order;
+    }
+    
 
 
 

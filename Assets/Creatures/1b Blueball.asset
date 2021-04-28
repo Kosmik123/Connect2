@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: 1b Blueball
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureTemplate
+  level: 1
+  sprite: {fileID: 2150147946917986396, guid: 884c1d63e0dfb934f95c4793629bbe17, type: 3}
+  incomeModifier: 0.5
+  nextForms:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: c541e990798cbe740b39dfc4f316c111, type: 2}

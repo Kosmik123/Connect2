@@ -53,10 +53,10 @@ public class Money
                 prefixIndex = j;
         }
 
-        float asDecimal = units[prefixIndex] +
+        float asFloating = units[prefixIndex] +
             (prefixIndex != 0 ? 1f * units[prefixIndex - 1] / HIGH_NUMBER : 0);
 
-        string result = asDecimal.ToString() + prefixes[prefixIndex];
+        string result = asFloating.ToString() + prefixes[prefixIndex];
         return result;
     }
 
@@ -126,4 +126,15 @@ public class Money
             }
         }
     }
+
+    public static decimal DecimalPow(decimal baseNum, int power)
+    {
+        decimal result = 1;
+        for (int i = 0; i < power; i++)
+            result *= baseNum;
+
+        return result;
+    }
+
+
 }

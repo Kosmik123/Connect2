@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b8454c70c10a94595f6df346b2c82c, type: 3}
+  m_Name: 3b Mooshrooman Red
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureTemplate
+  level: 0
+  sprite: {fileID: 300705439859474381, guid: 884c1d63e0dfb934f95c4793629bbe17, type: 3}
+  incomeModifier: 0.33
+  nextForms:
+  - {fileID: 11400000, guid: b428d1c4065c0ee4e95608b87a90a368, type: 2}
+  - {fileID: 0}
