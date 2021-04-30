@@ -129,6 +129,9 @@ public class Money
 
     public static decimal DecimalPow(decimal baseNum, int power)
     {
+        if (baseNum == 0)
+            return 0;
+
         decimal result = 1;
         for (int i = 0; i < power; i++)
             result *= baseNum;

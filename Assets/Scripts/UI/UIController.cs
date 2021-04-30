@@ -13,10 +13,12 @@ public class UIController : MonoBehaviour
     
     public Text moneyIndicator;
     public Text speedIndicator;
-    public Text priceIndicator;
+    //public Text priceIndicator;
 
     public ShopWindowController upgradesWindow;
     public ShopWindowController creaturesWindow;
+
+    [Header("Properties")]
 
     public decimal money, incomeSpeed;
     public decimal price;
@@ -28,21 +30,21 @@ public class UIController : MonoBehaviour
 
     void Start()
     {
-        
+        CreateCreatureProducts();
+        creaturesWindow.CreateButtons();
+        creaturesWindow.Refresh();
     }
 
     void Update()
     {
         moneyIndicator.text = AlteredStringForm(money) + "$";
         speedIndicator.text = AlteredStringForm(incomeSpeed) + "$/s";
-        //priceIndicator.text = AlteredStringForm(price) + "$";
     }
 
     public void ShowIncome(decimal income, Vector3 position)
     {
         var indicator = Instantiate(incomeIndicatorPrefab, worldCanvas);
         indicator.transform.position = position;
-
 
         indicator.GetComponentInChildren<Text>().text = "+" + AlteredStringForm(income) + "$";
     }
@@ -78,6 +80,32 @@ public class UIController : MonoBehaviour
         CreatureController.canCreturesBeMoved = true;
         window.gameObject.SetActive(false);
     }
+
+
+    public void CreateCreatureProducts()
+    {
+        Sprite[] creatureSprites = Settings.main.spritesByLevel;
+        creaturesWindow.buyables = new Buyable[creatureSprites.Length];
+
+        for (int lv = 0; lv < creatureSprites.Length; lv++)
+        {
+            Buyable prod = new BuyableCreature
+            {
+                sprite = creatureSprites[lv],
+                name = "Creature " + lv,
+                creatureLevel = lv,
+                description = "Buy a level " + lv + " creature.",
+                initialPrice = 1 + lv,
+                priceAdd = 1 + lv,
+                priceMultiplier = 2M
+            };
+            creaturesWindow.buyables[lv] = prod;
+        }
+
+    }
+
+
+
 
 
 }

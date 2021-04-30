@@ -6,8 +6,10 @@ public class Buyable
     public Sprite sprite;
     public string name;
     public string description;
-    public decimal price;
-    public int grade;
+
+    public decimal initialPrice;
+    public decimal priceMultiplier;
+    public decimal priceAdd;
 }
 
 [System.Serializable]

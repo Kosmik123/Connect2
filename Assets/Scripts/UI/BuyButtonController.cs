@@ -9,24 +9,45 @@ public class BuyButtonController : MonoBehaviour
 {
     [Header("To Link")]
     public Text nameText;
+    public Text priceText;
     public Text descriptionText;
     public Image graphicImage;
+    private GameController gameController;
 
     [Header("Settings")]
     public Buyable product;
 
-    private void Awake()
+    [Header("States")]
+    public int grade = 0;
+    public decimal price;
+
+
+    private void Start()
     {
+        gameController = GameController.main;
+
     }
 
 
     public void Refresh()
     {
-        nameText.text = product.name + " (" +
-            UIController.AlteredStringForm(product.price) + ")";
+        price = product.initialPrice + grade * product.priceAdd + Money.DecimalPow(product.priceMultiplier, grade);
+        priceText.text = UIController.AlteredStringForm(price) + "$";
+
+        nameText.text = product.name + " (" +grade +")";
         descriptionText.text = product.description;
         graphicImage.sprite = product.sprite;
     }
 
+    public void Buy()
+    {
+        bool success = gameController.BuyProduct(product, price);
+        if(success)
+        {
+            grade++;
+            Refresh();
+        }
+
+    }
 
 }

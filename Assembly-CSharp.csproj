@@ -63,17 +63,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\BuyWindowController.cs" />
     <Compile Include="Assets\Scripts\CreatureController.cs" />
     <Compile Include="Assets\Scripts\CreatureData.cs" />
-    <Compile Include="Assets\Scripts\CreaturesSettings.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
-    <Compile Include="Assets\Scripts\Money.cs" />
     <Compile Include="Assets\Scripts\SaveManager.cs" />
+    <Compile Include="Assets\Scripts\Scriptable Objects\CreaturesSettings.cs" />
+    <Compile Include="Assets\Scripts\Scriptable Objects\CreatureTemplate.cs" />
     <Compile Include="Assets\Scripts\Settings.cs" />
     <Compile Include="Assets\Scripts\UI\BuyButtonController.cs" />
     <Compile Include="Assets\Scripts\UI\IndicatorController.cs" />
+    <Compile Include="Assets\Scripts\UI\ShopWindowController.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
+    <Compile Include="Assets\Scripts\Utility\Buyable.cs" />
+    <Compile Include="Assets\Scripts\Utility\Money.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/Michas/Projekty gier/Unity/Connect2/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

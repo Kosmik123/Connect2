@@ -73,20 +73,30 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void BuyCreature()
+    public bool BuyProduct(Buyable product, decimal price)
     {
         if (money < price)
-            return;
+            return false;
 
-        CreateCreature();
         money -= price;
+        
+        if(product.GetType() == typeof(BuyableCreature))
+        {
+            BuyableCreature buyable = (BuyableCreature)product;
+            Debug.Log("Level kupionego to: " + buyable.creatureLevel);
+            CreateCreature(buyable.creatureLevel);
+        }
+        else
+        {
+            Debug.Log("Kupiono bonus");
+        }
 
-        decimal newPrice = price + price1;
-        price1 = price;
-        price = newPrice;
+
+        return true;
     }
 
-    public void CreateCreature(int lv = 0)
+
+    public void CreateCreature(int lv)
     {
         GameObject creatureObj = Instantiate(creaturePrefab, creaturesContainer);
         creatureObj.transform.position = new Vector3(
