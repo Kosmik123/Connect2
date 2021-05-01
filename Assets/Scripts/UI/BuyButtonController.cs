@@ -31,10 +31,11 @@ public class BuyButtonController : MonoBehaviour
 
     public void Refresh()
     {
-        price = product.initialPrice + grade * product.priceAdd + Money.DecimalPow(product.priceMultiplier, grade);
-        priceText.text = UIController.AlteredStringForm(price) + "$";
+        price = decimal.Round(product.initialPrice + grade * product.priceAdd +
+            Money.DecimalPow(product.priceMultiplier, grade));
+        priceText.text = UIController.AlteredStringForm(price) + Money.symbol;
 
-        nameText.text = product.name + " (" +grade +")";
+        nameText.text = product.name;
         descriptionText.text = product.description;
         graphicImage.sprite = product.sprite;
     }
@@ -46,8 +47,8 @@ public class BuyButtonController : MonoBehaviour
         {
             grade++;
             Refresh();
+            gameController.RecalculateIncomeSpeed();
         }
-
     }
 
 }

@@ -44,8 +44,8 @@ public class GameController : MonoBehaviour
     void Start()
     {
         ui = UIController.main;
-        StartCoroutine("RegularSaveGameCo");
-        StartCoroutine("UpdateIncomeSpeed");
+        //StartCoroutine(nameof(RegularSaveGameCo));
+        StartCoroutine(nameof(UpdateIncomeSpeed));
     }
 
     void Update()
@@ -59,7 +59,7 @@ public class GameController : MonoBehaviour
     {
         while(true)
         {
-            if (incomeSpeed < 100 && incomeSpeed > 0)
+            if (incomeSpeed < 1000 && incomeSpeed > 0)
             {
                 yield return new WaitForSeconds((float) (1 / incomeSpeed));
                 money += 1;
@@ -69,7 +69,6 @@ public class GameController : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
                 money += incomeSpeed / 10;
             }
-
         }
     }
 
@@ -83,15 +82,13 @@ public class GameController : MonoBehaviour
         if(product.GetType() == typeof(BuyableCreature))
         {
             BuyableCreature buyable = (BuyableCreature)product;
-            Debug.Log("Level kupionego to: " + buyable.creatureLevel);
+            Debug.Log("Buying creature with level: " + buyable.creatureLevel);
             CreateCreature(buyable.creatureLevel);
         }
         else
         {
-            Debug.Log("Kupiono bonus");
+            Debug.Log("Buying bonus");
         }
-
-
         return true;
     }
 
@@ -136,6 +133,7 @@ public class GameController : MonoBehaviour
     {
         SaveData save = new SaveData();
         save.spritesOrder = settings.GetSpritesOrder();
+        save.creatureNames = settings.namesByLevel;
         save.money = money;
 
         creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
@@ -175,10 +173,12 @@ public class GameController : MonoBehaviour
                 }
             }
             settings.MakeSpritesArray(save.spritesOrder);
+            settings.namesByLevel = save.creatureNames;
         }
         else
         {
             settings.MakeSpritesArray();
+            settings.MakeNewCreatureNames();
         }
     }
 

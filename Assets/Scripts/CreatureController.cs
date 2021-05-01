@@ -18,6 +18,7 @@ public class CreatureController : MonoBehaviour
     [Header("Properties")]
     [Range(0,1)]
     public float moveSpeed;
+    public float fusionRange;
     
     [Header("Movement States")]
     public Vector3 targetPosition;
@@ -117,13 +118,15 @@ public class CreatureController : MonoBehaviour
     {
         isDragged = false;
 
-        touchedColliders = new Collider2D[1];
-        creature.collider.OverlapCollider(new ContactFilter2D(), touchedColliders);
+        //touchedColliders = new Collider2D[1];
+        //creature.collider.OverlapCollider(new ContactFilter2D(), touchedColliders);
+
+        touchedColliders = Physics2D.OverlapCircleAll(transform.position, fusionRange * transform.localScale.x);
         if(touchedColliders.Length > 0)
         {
             for (int i = 0; i < touchedColliders.Length; i++)
             {
-                if (touchedColliders[i] != null)
+                if (touchedColliders[i] != null && touchedColliders[i] != creature.collider)
                 {
                     var otherCreature = touchedColliders[i].GetComponent<CreatureData>();
                     if (otherCreature != null && otherCreature.level == creature.level)
@@ -137,7 +140,6 @@ public class CreatureController : MonoBehaviour
             }
         }
         gameController.RecalculateIncomeSpeed();
-
     }
 }
 

@@ -7,6 +7,8 @@ public class UIController : MonoBehaviour
 {
     public static UIController main;
 
+    Settings settings;
+
     [Header("To Link")]
     public Transform worldCanvas;
     public GameObject incomeIndicatorPrefab;
@@ -30,6 +32,7 @@ public class UIController : MonoBehaviour
 
     void Start()
     {
+        settings = Settings.main;
         CreateCreatureProducts();
         creaturesWindow.CreateButtons();
         creaturesWindow.Refresh();
@@ -37,8 +40,8 @@ public class UIController : MonoBehaviour
 
     void Update()
     {
-        moneyIndicator.text = AlteredStringForm(money) + "$";
-        speedIndicator.text = AlteredStringForm(incomeSpeed) + "$/s";
+        moneyIndicator.text = AlteredStringForm(money) + Money.symbol;
+        speedIndicator.text = AlteredStringForm(incomeSpeed) + Money.symbol + "/s";
     }
 
     public void ShowIncome(decimal income, Vector3 position)
@@ -46,7 +49,7 @@ public class UIController : MonoBehaviour
         var indicator = Instantiate(incomeIndicatorPrefab, worldCanvas);
         indicator.transform.position = position;
 
-        indicator.GetComponentInChildren<Text>().text = "+" + AlteredStringForm(income) + "$";
+        indicator.GetComponentInChildren<Text>().text = "+" + AlteredStringForm(income) + Money.symbol;
     }
 
     public static string AlteredStringForm(decimal number, string separator = "")
@@ -92,16 +95,16 @@ public class UIController : MonoBehaviour
             Buyable prod = new BuyableCreature
             {
                 sprite = creatureSprites[lv],
-                name = "Creature " + lv,
+                name = settings.namesByLevel[lv][0].ToString().ToUpper() +
+                    settings.namesByLevel[lv].Substring(1),
                 creatureLevel = lv,
                 description = "Buy a level " + lv + " creature.",
                 initialPrice = 1 + lv,
                 priceAdd = 1 + lv,
-                priceMultiplier = 2M
+                priceMultiplier = 1.2M
             };
             creaturesWindow.buyables[lv] = prod;
         }
-
     }
 
 

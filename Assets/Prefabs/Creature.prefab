@@ -194,7 +194,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e28763e46c7e4f4eb1060a8fef22c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  creature: {fileID: 0}
   moveSpeed: 0.01
+  fusionRange: 0.3
   targetPosition: {x: 0, y: 0, z: 0}
   isDragged: 0
   touchedColliders:

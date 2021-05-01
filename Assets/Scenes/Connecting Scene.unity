@@ -279,7 +279,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 88
+    m_FontSize: 64
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
@@ -335,8 +335,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -60, y: -60}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -52.1, y: -52.1}
+  m_SizeDelta: {x: 84.1, y: 84.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &300989904
 MonoBehaviour:
@@ -790,8 +790,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -42, y: -50}
-  m_SizeDelta: {x: 620, y: 100}
+  m_AnchoredPosition: {x: 0, y: -53.6}
+  m_SizeDelta: {x: 580, y: 107.2}
   m_Pivot: {x: 0.49999982, y: 0.50000155}
 --- !u!114 &800388747
 MonoBehaviour:
@@ -813,7 +813,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 81
+    m_FontSize: 72
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
@@ -1068,7 +1068,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.1
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 40
   m_Viewport: {fileID: 0}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -1125,6 +1125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1414657423}
   - component: {fileID: 1414657422}
+  - component: {fileID: 1414657426}
   - component: {fileID: 1414657424}
   - component: {fileID: 1414657425}
   m_Layer: 0
@@ -1158,28 +1159,29 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1.0001984
-      inSlope: 0
-      outSlope: 0
+      time: -0.000030517578
+      value: 0.9857178
+      inSlope: 1.0909477
+      outSlope: 1.0909477
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.112730026
     - serializedVersion: 3
       time: 1
-      value: 3
-      inSlope: 0
-      outSlope: 0
+      value: 3.0195007
+      inSlope: 0.06385137
+      outSlope: 0.06385137
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.0321885
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   textureName: creatures
   spritesByLevel: []
+  namesByLevel: []
 --- !u!4 &1414657423
 Transform:
   m_ObjectHideFlags: 0
@@ -1224,6 +1226,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   savefileName: save1.sav
+--- !u!114 &1414657426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414657421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b38650a31c510bc4fbdc82ac222a5f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vowels: aeiouy
+  consonants: bcdfghjklmnpqrstvwxz
+  minLength: 3
+  maxLength: 6
 --- !u!1 &1585854711
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,7 +1461,7 @@ GameObject:
   - component: {fileID: 1980659298}
   - component: {fileID: 1980659297}
   m_Layer: 5
-  m_Name: hop ButtonShop Button
+  m_Name: Creature Buy Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1577,7 +1595,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2009108857
 RectTransform:
   m_ObjectHideFlags: 0

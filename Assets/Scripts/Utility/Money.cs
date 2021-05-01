@@ -2,6 +2,7 @@
 [System.Serializable]
 public class Money
 {
+    public static string symbol = "$";
     public struct Prefix
     {
         public string fullName;
@@ -14,24 +15,23 @@ public class Money
         }
     }
 
-
     public static Prefix[] prefixes = {
         new Prefix("",""),
-        new Prefix("k","kilo"),
-        new Prefix("M","Mega"),
-        new Prefix("G","Giga"),
-        new Prefix("T","Tera"),
-        new Prefix("P","Peta"),
-        new Prefix("E","Exa"),
-        new Prefix("Z","Zeta"),
-        new Prefix("Y","Yotta"),
-        new Prefix("R","Ronna"),
-        new Prefix("Q","Quecca"),
-        new Prefix("X","Xenna"),
-        new Prefix("W","Weka"),
-        new Prefix("V","Vendeka"),
-        new Prefix("D","Dodeka"),
-        new Prefix("L","Lasterra") 
+        new Prefix("k","kilo"), // k
+        new Prefix("M","Mega"), // M
+        new Prefix("G","Giga"), // B
+        new Prefix("T","Tera"), // T
+        new Prefix("P","Peta"), // Qu
+        new Prefix("E","Exa"),  // qi
+        new Prefix("Z","Zeta"), // Sx
+        new Prefix("Y","Yotta"), // Sp
+        new Prefix("R","Ronna"), // Oc
+        new Prefix("Q","Quecca"),// No
+        new Prefix("X","Xenna"), // Dc
+        new Prefix("W","Weka"),  // UDc
+        new Prefix("V","Vendeka"), // DDc
+        new Prefix("D","Dodeka"),  // TDc
+        new Prefix("L","Lasterra") // QDc
     };
 
     public const int HIGH_NUMBER = 1000;
@@ -42,7 +42,6 @@ public class Money
     {
         Add(integer);
     }
-
 
     public override string ToString()
     {
@@ -138,6 +137,4 @@ public class Money
 
         return result;
     }
-
-
 }

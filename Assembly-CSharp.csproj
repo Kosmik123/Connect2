@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Utility\Buyable.cs" />
     <Compile Include="Assets\Scripts\Utility\Money.cs" />
+    <Compile Include="Assets\Scripts\Utility\RandomNamesGenerator.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/Michas/Projekty gier/Unity/Connect2/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

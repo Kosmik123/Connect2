@@ -82,7 +82,7 @@ public class SaveData
     public decimal money;
     public int[] creatures;
 
+    public string[] creatureNames;
     public int[] spritesOrder;
-
 
 }

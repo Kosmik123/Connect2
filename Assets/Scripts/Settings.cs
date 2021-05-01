@@ -15,6 +15,7 @@ public class Settings : MonoBehaviour
 
     public string textureName;
     public Sprite[] spritesByLevel;
+    public string[] namesByLevel;
 
     private Sprite[] sprites;
 
@@ -37,7 +38,6 @@ public class Settings : MonoBehaviour
         if(sprites == null)
             sprites = Resources.LoadAll<Sprite>(textureName);
         spritesByLevel = new Sprite[sprites.Length];
-
 
         if (spritesOrder == null || spritesOrder.Length < 1)
         {
@@ -64,6 +64,19 @@ public class Settings : MonoBehaviour
             }    
         }
     }
+
+    public void MakeNewCreatureNames()
+    {
+        namesByLevel = new string[spritesByLevel.Length];
+        RandomNamesGenerator gen = GetComponent<RandomNamesGenerator>();
+
+        for(int lv = 0; lv < namesByLevel.Length; lv++)
+        {
+            string name = gen.GetRandomName();
+            namesByLevel[lv] = name;
+        }
+    }
+
 
     public int[] GetSpritesOrder()
     {
