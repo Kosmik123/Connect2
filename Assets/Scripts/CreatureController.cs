@@ -87,7 +87,7 @@ public class CreatureController : MonoBehaviour
 
     void DoDrag()
     { 
-        //relativePos = Vector3.Lerp(relativePos, Vector3.zero, 0.1f);
+        relativePos = Vector3.Lerp(relativePos, relativePos.z * Vector3.forward, 0.05f);
         transform.position = relativePos + 
             Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
@@ -117,29 +117,28 @@ public class CreatureController : MonoBehaviour
     private void OnMouseUp()
     {
         isDragged = false;
-
-        //touchedColliders = new Collider2D[1];
-        //creature.collider.OverlapCollider(new ContactFilter2D(), touchedColliders);
-
-        touchedColliders = Physics2D.OverlapCircleAll(transform.position, fusionRange * transform.localScale.x);
-        if(touchedColliders.Length > 0)
+        if (canCreturesBeMoved)
         {
-            for (int i = 0; i < touchedColliders.Length; i++)
+            touchedColliders = Physics2D.OverlapCircleAll(transform.position, fusionRange * transform.localScale.x);
+            if (touchedColliders.Length > 0)
             {
-                if (touchedColliders[i] != null && touchedColliders[i] != creature.collider)
+                for (int i = 0; i < touchedColliders.Length; i++)
                 {
-                    var otherCreature = touchedColliders[i].GetComponent<CreatureData>();
-                    if (otherCreature != null && otherCreature.level == creature.level)
+                    if (touchedColliders[i] != null && touchedColliders[i] != creature.collider)
                     {
-                        Destroy(gameObject);
-                        otherCreature.LevelUp();
-                        otherCreature.gameObject.name = "Creature " + otherCreature.level;
-                        break;
+                        var otherCreature = touchedColliders[i].GetComponent<CreatureData>();
+                        if (otherCreature != null && otherCreature.level == creature.level)
+                        {
+                            otherCreature.LevelUp();
+                            otherCreature.gameObject.name = "Creature " + otherCreature.level;
+                            Destroy(gameObject);
+                            break;
+                        }
                     }
                 }
             }
+            gameController.RecalculateIncomeSpeedAndMaxLevels();
         }
-        gameController.RecalculateIncomeSpeed();
     }
 }
 

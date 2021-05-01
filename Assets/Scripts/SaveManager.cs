@@ -84,5 +84,4 @@ public class SaveData
 
     public string[] creatureNames;
     public int[] spritesOrder;
-
 }

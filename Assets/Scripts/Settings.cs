@@ -9,6 +9,7 @@ public class Settings : MonoBehaviour
     private CreaturesSettings settings;
 
     [Header("Creatures")]
+    public int creaturesCount;
     public Rect creaturesArea;
     public int maxLevel;
     public AnimationCurve scaleByLevel;
@@ -16,6 +17,7 @@ public class Settings : MonoBehaviour
     public string textureName;
     public Sprite[] spritesByLevel;
     public string[] namesByLevel;
+    public int[] buyableLevelsUnlocked;
 
     private Sprite[] sprites;
 
@@ -23,6 +25,7 @@ public class Settings : MonoBehaviour
     {
         main = this;
         sprites = Resources.LoadAll<Sprite>(textureName);
+        creaturesCount = sprites.Length;
     }
 
     private void Start()

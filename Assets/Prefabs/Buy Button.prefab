@@ -188,8 +188,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 115, y: -101.2}
-  m_SizeDelta: {x: -267.3, y: -226.7}
+  m_AnchoredPosition: {x: 115, y: -67.3}
+  m_SizeDelta: {x: -267.3, y: -178}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1377540229616561786
 CanvasRenderer:
@@ -230,9 +230,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Product description
-
-    multiline max 2 lines'
+  m_Text: "Product description\nmultiline \nmax 3 lines"
 --- !u!1 &1377540229661090901
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,8 +338,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.675, y: 100.54999}
-  m_SizeDelta: {x: -42.65, y: -221.5}
+  m_AnchoredPosition: {x: -125.7, y: 91}
+  m_SizeDelta: {x: -299.4, y: -221.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1377540229675298364
 CanvasRenderer:
@@ -382,7 +380,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Bonus Name & Grade
+  m_Text: ProductName
 --- !u!1 &7093790763765509960
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,8 +415,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 115, y: 8.1}
-  m_SizeDelta: {x: -267.3, y: -233.6}
+  m_AnchoredPosition: {x: 212.97, y: 91.000015}
+  m_SizeDelta: {x: -463.26, y: -233.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2086037560408522274
 CanvasRenderer:
@@ -448,15 +446,15 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 58
+    m_FontSize: 40
     m_FontStyle: 1
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 58
+    m_BestFit: 1
+    m_MinSize: 40
+    m_MaxSize: 60
     m_Alignment: 4
-    m_AlignByGeometry: 0
+    m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Price $
+  m_Text: 110.12k$

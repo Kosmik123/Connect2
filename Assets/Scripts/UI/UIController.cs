@@ -33,9 +33,7 @@ public class UIController : MonoBehaviour
     void Start()
     {
         settings = Settings.main;
-        CreateCreatureProducts();
-        creaturesWindow.CreateButtons();
-        creaturesWindow.Refresh();
+        Debug.Log("UI Start");
     }
 
     void Update()
@@ -76,6 +74,7 @@ public class UIController : MonoBehaviour
     {
         CreatureController.canCreturesBeMoved = false;
         window.gameObject.SetActive(true);
+        window.Refresh();
     }
 
     public void HideWindow(ShopWindowController window)
@@ -83,30 +82,6 @@ public class UIController : MonoBehaviour
         CreatureController.canCreturesBeMoved = true;
         window.gameObject.SetActive(false);
     }
-
-
-    public void CreateCreatureProducts()
-    {
-        Sprite[] creatureSprites = Settings.main.spritesByLevel;
-        creaturesWindow.buyables = new Buyable[creatureSprites.Length];
-
-        for (int lv = 0; lv < creatureSprites.Length; lv++)
-        {
-            Buyable prod = new BuyableCreature
-            {
-                sprite = creatureSprites[lv],
-                name = settings.namesByLevel[lv][0].ToString().ToUpper() +
-                    settings.namesByLevel[lv].Substring(1),
-                creatureLevel = lv,
-                description = "Buy a level " + lv + " creature.",
-                initialPrice = 1 + lv,
-                priceAdd = 1 + lv,
-                priceMultiplier = 1.2M
-            };
-            creaturesWindow.buyables[lv] = prod;
-        }
-    }
-
 
 
 

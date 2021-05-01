@@ -47,7 +47,7 @@ public class BuyButtonController : MonoBehaviour
         {
             grade++;
             Refresh();
-            gameController.RecalculateIncomeSpeed();
+            gameController.RecalculateIncomeSpeedAndMaxLevels();
         }
     }
 
