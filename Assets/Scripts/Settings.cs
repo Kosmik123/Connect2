@@ -9,7 +9,7 @@ public class Settings : MonoBehaviour
     private CreaturesSettings settings;
 
     [Header("Creatures")]
-    public int creaturesCount;
+    public int creatureSpeciesCount;
     public Rect creaturesArea;
     public int maxLevel;
     public AnimationCurve scaleByLevel;
@@ -25,7 +25,7 @@ public class Settings : MonoBehaviour
     {
         main = this;
         sprites = Resources.LoadAll<Sprite>(textureName);
-        creaturesCount = sprites.Length;
+        creatureSpeciesCount = sprites.Length;
     }
 
     private void Start()
@@ -34,6 +34,14 @@ public class Settings : MonoBehaviour
         CreatureData.maxLevel = maxLevel;        
         
         CreatureController.movementRange = creaturesArea;
+
+        buyableLevelsUnlocked = new int[creatureSpeciesCount];
+        for(int i = 0; i < creatureSpeciesCount; i++)
+        {
+            buyableLevelsUnlocked[i] = Mathf.Max(i - 2, 0);
+        }
+
+
     }
 
     public void MakeSpritesArray(int[] spritesOrder = null)
@@ -76,7 +84,7 @@ public class Settings : MonoBehaviour
         for(int lv = 0; lv < namesByLevel.Length; lv++)
         {
             string name = gen.GetRandomName();
-            namesByLevel[lv] = name;
+            namesByLevel[lv] = name[0].ToString().ToUpper() + name.Substring(1);
         }
     }
 

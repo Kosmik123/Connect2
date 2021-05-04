@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Scriptable Objects\CreatureTemplate.cs" />
     <Compile Include="Assets\Scripts\Settings.cs" />
     <Compile Include="Assets\Scripts\UI\BuyButtonController.cs" />
+    <Compile Include="Assets\Scripts\UI\CongratsWindow.cs" />
     <Compile Include="Assets\Scripts\UI\IndicatorController.cs" />
     <Compile Include="Assets\Scripts\UI\ShopWindowController.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />

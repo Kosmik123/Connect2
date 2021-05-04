@@ -39,7 +39,7 @@ public class CreatureController : MonoBehaviour
     void Start()
     {
         gameController = GameController.main;
-        StartCoroutine("MoveRandomlyCo");
+        StartCoroutine(nameof(MoveRandomlyCo));
     }
 
     void Update()
@@ -131,6 +131,9 @@ public class CreatureController : MonoBehaviour
                         {
                             otherCreature.LevelUp();
                             otherCreature.gameObject.name = "Creature " + otherCreature.level;
+                            gameController.CheckCongratulations(otherCreature.level);
+
+                            gameController.creatures.Remove(creature);
                             Destroy(gameObject);
                             break;
                         }

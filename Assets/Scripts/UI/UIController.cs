@@ -19,6 +19,8 @@ public class UIController : MonoBehaviour
 
     public ShopWindowController upgradesWindow;
     public ShopWindowController creaturesWindow;
+    public CongratsWindow congratsWindow;
+
 
     [Header("Properties")]
 
@@ -70,20 +72,25 @@ public class UIController : MonoBehaviour
         return alteredString.Substring(0,maxLength) + separator + Money.prefixes[lastIndex].shortName;
     }
 
-    public void ShowWindow(ShopWindowController window)
+    public void ToggleWindow(ShopWindowController window)
+    {
+        if (window.gameObject.activeInHierarchy)
+            HideWindow(window);
+        else
+            ShowWindow(window);
+    }
+
+
+    public void ShowWindow(Window window)
     {
         CreatureController.canCreturesBeMoved = false;
         window.gameObject.SetActive(true);
         window.Refresh();
     }
 
-    public void HideWindow(ShopWindowController window)
+    public void HideWindow(Window window)
     {
         CreatureController.canCreturesBeMoved = true;
         window.gameObject.SetActive(false);
     }
-
-
-
-
 }

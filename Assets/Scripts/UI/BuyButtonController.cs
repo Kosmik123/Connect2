@@ -31,8 +31,8 @@ public class BuyButtonController : MonoBehaviour
 
     public void Refresh()
     {
-        price = decimal.Round(product.initialPrice + grade * product.priceAdd +
-            Money.DecimalPow(product.priceMultiplier, grade));
+        price = decimal.Round(Money.DecimalPow(product.priceMultiplier, grade) *
+            (product.initialPrice + grade * product.priceAdd) );
         priceText.text = UIController.AlteredStringForm(price) + Money.symbol;
 
         nameText.text = product.name;

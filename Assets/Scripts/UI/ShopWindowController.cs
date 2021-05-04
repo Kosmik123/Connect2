@@ -2,7 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopWindowController : MonoBehaviour
+
+public class Window : MonoBehaviour
+{
+    public virtual void Refresh()
+    {
+
+    }
+}
+
+public class ShopWindowController : Window
 {
 
     [Header("To Link")]
@@ -30,17 +39,18 @@ public class ShopWindowController : MonoBehaviour
         }
     }
 
-    public void Refresh()
+    public override void Refresh()
     {
         buttonsContainer.sizeDelta = new Vector2(
             buttonsContainer.sizeDelta.x,
-            unlockedButtons * Mathf.Abs(buttonsDistance) + Mathf.Abs(startingHeight));
+            unlockedButtons * Mathf.Abs(buttonsDistance) + Mathf.Abs(0.2f * startingHeight));
         buttonsContainer.localPosition = -buttonsContainer.sizeDelta.y * Vector3.down;
 
         for (int i = 0; i < buttons.Length; i++)
         {
             buttons[i].transform.localPosition = new Vector3(0, buttonsContainer.rect.yMax + startingHeight + i * buttonsDistance, 0);
             buttons[i].gameObject.SetActive(i < unlockedButtons);
+            buttons[i].Refresh();
         }
     }
 
@@ -54,5 +64,22 @@ public class ShopWindowController : MonoBehaviour
         buttons[buttonIndex] = buyButton;
         buyButton.Refresh();
     }
+
+    public int[] GetButtonsGrades()
+    {
+        int[] grades = new int[buttons.Length];
+        for(int i = 0; i < buttons.Length; i++)
+            grades[i] = buttons[i].grade;
+
+        return grades;
+    }
+
+    public void SetButtonsGrades(int[] grades)
+    {
+        int len = Mathf.Min(grades.Length, buttons.Length);
+        for (int i = 0; i < len; i++)
+            buttons[i].grade = grades[i];
+    }
+
 
 }

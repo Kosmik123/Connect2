@@ -17,45 +17,43 @@ public class GameController : MonoBehaviour
 
     [Header("States")]
     public decimal money, incomeSpeed;
-    public CreatureData[] creatures;
+    public List<CreatureData> creatures = new List<CreatureData>();
 
     private decimal price1 = 1, price = 0;
-    public int maxCreatureLevel;
+    public int maxCreatureLevel, unlockedCreatures;
+
+    private int[] creatureButtonsGrades;
 
     [Header("Bonuses")]
     public decimal globalBonus;
-    public decimal[] creatureMultipliers;
 
     private void Awake()
     {
         main = this;
         settings = Settings.main;
-        settings.MakeSpritesArray();
-
         saveManager = GetComponent<SaveManager>();
-
-        LoadGame();
-
-        settings.buyableLevelsUnlocked = new int[settings.creaturesCount];
-        creatureMultipliers = new decimal[settings.creaturesCount];
-        for (int lv = 0; lv < settings.creaturesCount; lv++)
-        {
-            settings.buyableLevelsUnlocked[lv] = lv / 2;
-            creatureMultipliers[lv] = 1;
-        }
-        
-
     }
 
     void Start()
     {
         ui = UIController.main;
 
-        RecalculateIncomeSpeedAndMaxLevels();
+        bool isGameLoaded = LoadGame();
+        if(!isGameLoaded)
+        {
+            settings.MakeSpritesArray();
+            settings.MakeNewCreatureNames();
+            creatureButtonsGrades = new int[settings.creatureSpeciesCount];
+        }
+
         CreateCreatureProducts();
+
         ui.creaturesWindow.CreateButtons();
+        ui.creaturesWindow.SetButtonsGrades(creatureButtonsGrades);
         ui.creaturesWindow.Refresh();
 
+        RecalculateIncomeSpeedAndMaxLevels();
+        unlockedCreatures = maxCreatureLevel;
         //StartCoroutine(nameof(RegularSaveGameCo));
         StartCoroutine(nameof(UpdateIncomeSpeed));
     }
@@ -83,6 +81,7 @@ public class GameController : MonoBehaviour
             }
         }
     }
+
 
     public bool BuyProduct(Buyable product, decimal price)
     {
@@ -112,7 +111,10 @@ public class GameController : MonoBehaviour
             Random.Range(settings.creaturesArea.xMin, settings.creaturesArea.xMax),
             Random.Range(settings.creaturesArea.yMin, settings.creaturesArea.yMax));
         creatureObj.name = "Creature " + lv;
-        creatureObj.GetComponent<CreatureData>().level = lv;
+
+        var creature = creatureObj.GetComponent<CreatureData>();
+        creatures.Add(creature);
+        creature.level = lv;
         maxCreatureLevel = Mathf.Max(maxCreatureLevel, lv);
     }
 
@@ -126,24 +128,23 @@ public class GameController : MonoBehaviour
     public  decimal GetIncome(int creatureLevel)
     {
         return (Money.DecimalPow(2, creatureLevel) + creatureLevel
-            + globalBonus) * creatureMultipliers[creatureLevel];
+            + globalBonus);
     }
 
     public decimal GetIncomeSpeed(int creatureLevel)
     {
-        return Money.DecimalPow(2, creatureLevel) - 1;
+        return Money.DecimalPow(creatureLevel, 2);
     }
 
     public void RecalculateIncomeSpeedAndMaxLevels()
     {
         incomeSpeed = 0;
-        creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
         foreach (var creature in creatures)
         { 
             incomeSpeed += GetIncomeSpeed(creature.level);
             maxCreatureLevel = Mathf.Max(maxCreatureLevel, creature.level);
         }
-        ui.creaturesWindow.unlockedButtons = settings.buyableLevelsUnlocked[maxCreatureLevel];
+        ui.creaturesWindow.unlockedButtons = settings.buyableLevelsUnlocked[maxCreatureLevel] + 1;
     }
 
     public void SaveGame()
@@ -153,7 +154,6 @@ public class GameController : MonoBehaviour
         save.creatureNames = settings.namesByLevel;
         save.money = money;
 
-        creatures = creaturesContainer.GetComponentsInChildren<CreatureData>();
         int maxLevel = 0;
         foreach(var creature in creatures)
         {
@@ -165,11 +165,12 @@ public class GameController : MonoBehaviour
         foreach (var creature in creatures)
             creaturesCounts[creature.level]++;
         save.creatures = creaturesCounts;
+        save.creatureShopGrades = ui.creaturesWindow.GetButtonsGrades();
 
         saveManager.WriteSaveFile(save);
     }
 
-    public void LoadGame()
+    public bool LoadGame()
     {
         SaveData save = saveManager.ReadSaveFile();
         if (save != null)
@@ -194,12 +195,12 @@ public class GameController : MonoBehaviour
                 settings.MakeNewCreatureNames();
             else
                 settings.namesByLevel = save.creatureNames;
+
+            creatureButtonsGrades = save.creatureShopGrades;
+
+            return true;
         }
-        else
-        {
-            settings.MakeSpritesArray();
-            settings.MakeNewCreatureNames();
-        }
+        return false;
     }
 
     public static int IntParseFast(string value)
@@ -230,12 +231,10 @@ public class GameController : MonoBehaviour
 
     public void CreateCreatureProducts()
     {
-        GameController gc = GameController.main;
-
         Sprite[] creatureSprites = Settings.main.spritesByLevel;
-        ui.creaturesWindow.buyables = new Buyable[settings.creaturesCount];
+        ui.creaturesWindow.buyables = new Buyable[settings.creatureSpeciesCount];
 
-        for (int lv = 0; lv < settings.creaturesCount; lv++)
+        for (int lv = 0; lv < settings.creatureSpeciesCount; lv++)
         {
             Buyable prod = new BuyableCreature()
             {
@@ -244,20 +243,37 @@ public class GameController : MonoBehaviour
 
             prod.sprite = creatureSprites[lv];
 
-            prod.name = settings.namesByLevel[lv][0].ToString().ToUpper() +
-                settings.namesByLevel[lv].Substring(1);
+            prod.name = settings.namesByLevel[lv];
             prod.description = prod.name + " gives you " + 
-                UIController.AlteredStringForm(gc.GetIncomeSpeed(lv)) + Money.symbol + 
-                "/s and " + UIController.AlteredStringForm(gc.GetIncome(lv)) + Money.symbol +
+                UIController.AlteredStringForm(GetIncomeSpeed(lv)) + Money.symbol + 
+                "/s and " + UIController.AlteredStringForm(GetIncome(lv)) + Money.symbol +
                 " for a click.";
 
-            prod.initialPrice = Money.DecimalPow(2, lv);
+            prod.initialPrice = Money.DecimalPow(2, lv) + lv;
             prod.priceAdd = 1 + lv;
             prod.priceMultiplier = 1.2M;
 
             ui.creaturesWindow.buyables[lv] = prod;
         }
     }
+
+    public void CheckCongratulations(int level)
+    {
+        if (level > unlockedCreatures)
+        {
+            Congratulate(level);
+            unlockedCreatures = level;
+        }
+    }
+
+
+    void Congratulate(int level)
+    {
+        ui.congratsWindow.creatureLevel = level;
+        ui.ShowWindow(ui.congratsWindow);
+    }
+
+
 
 
     private IEnumerator RegularSaveGameCo()
@@ -278,7 +294,8 @@ public class GameController : MonoBehaviour
 
     private void OnApplicationPause(bool pause)
     {
-        SaveGame();
+        if(pause)
+            SaveGame();
     }
 
 }
