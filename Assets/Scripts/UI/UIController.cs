@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -105,14 +104,13 @@ public class UIController : MonoBehaviour
 
     private void CreateCreatureProducts()
     {
-        Sprite[] creatureSprites = game.Settings.spritesByLevel;
-        creaturesWindow.Init(game.Settings.creatureSpeciesCount);
-        for (int level = 0; level < game.Settings.creatureSpeciesCount; level++)
+        creaturesWindow.Init(game.Settings.CreatureSpeciesCount);
+        for (int level = 0; level < game.Settings.CreatureSpeciesCount; level++)
         {
             var product = new BuyableCreature(level)
             {
-                sprite = creatureSprites[level],
-                name = game.Settings.namesByLevel[level],
+                sprite = game.Settings.GetCreatureSprite(level),
+                name = game.Settings.GetCreatureName(level),
 
                 initialPrice = decimal.Round(Money.DecimalPow(2.2M, level) + level),
                 priceAdd = 1 + level,

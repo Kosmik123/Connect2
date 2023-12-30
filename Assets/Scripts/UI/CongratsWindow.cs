@@ -21,7 +21,7 @@ public class CongratsWindow : Window
     public override void Refresh()
     {
         var settings = GameController.main.Settings;
-        creatureName.text = settings.namesByLevel[creatureLevel];
-        creatureSprite.sprite = settings.spritesByLevel[creatureLevel];
+        creatureName.text = settings.GetCreatureName(creatureLevel);
+        creatureSprite.sprite = settings.GetCreatureSprite(creatureLevel);
     }
 }

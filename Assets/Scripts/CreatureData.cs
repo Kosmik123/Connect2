@@ -54,7 +54,7 @@ public class CreatureData : MonoBehaviour
     void Refresh()
     {
         transform.localScale = Vector3.one * scaleCurve.Evaluate(1f * level / maxLevel);
-        renderer.sprite = settings.spritesByLevel[level];
+        renderer.sprite = settings.GetCreatureSprite(level);
     }
 
     public void LevelUp()

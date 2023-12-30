@@ -13,5 +13,4 @@ public class CreatureTemplate : ScriptableObject
 
     [SerializeField]
     private CreatureTemplate[] nextForms = new CreatureTemplate[2];
-
 }

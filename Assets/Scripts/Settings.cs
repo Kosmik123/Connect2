@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Settings : MonoBehaviour
 {
@@ -9,15 +10,27 @@ public class Settings : MonoBehaviour
     private RandomNamesGenerator randomNamesGenerator;
 
     [Header("Creatures")]
-    public int creatureSpeciesCount;
-    public Rect creaturesArea;
-    public int maxLevel;
-    public AnimationCurve scaleByLevel;
+    [SerializeField]
+    private int creatureSpeciesCount;
+    public int CreatureSpeciesCount => creatureSpeciesCount;
 
-    public string textureName;
-    public Sprite[] spritesByLevel;
-    public string[] namesByLevel;
-    public int[] buyableLevelsUnlocked;
+    [SerializeField]
+    private Rect creaturesArea;
+    public Rect CreaturesArea => creaturesArea;
+
+    [SerializeField]
+    private int maxLevel;
+    [SerializeField]
+    private AnimationCurve scaleByLevel;
+
+    [SerializeField]
+    private string textureName;
+    [SerializeField]
+    private Sprite[] spritesByLevel;
+    [SerializeField]
+    private string[] namesByLevel;
+    [SerializeField]
+    private int[] buyableLevelsUnlocked;
 
     private Sprite[] sprites;
 
@@ -32,15 +45,23 @@ public class Settings : MonoBehaviour
         CreatureData.scaleCurve = scaleByLevel;
         CreatureData.maxLevel = maxLevel;        
         
-        CreatureController.movementRange = creaturesArea;
+        CreatureController.movementRange = CreaturesArea;
 
         buyableLevelsUnlocked = new int[creatureSpeciesCount];
         for(int i = 0; i < creatureSpeciesCount; i++)
         {
             buyableLevelsUnlocked[i] = Mathf.Max(i - 2, 0);
         }
+    }
 
+    public Sprite GetCreatureSprite(int level)
+    {
+        return spritesByLevel[level];
+    }
 
+    public string GetCreatureName(int level)
+    {
+        return namesByLevel[level];
     }
 
     public void MakeSpritesArray(int[] spritesOrder = null)
@@ -115,7 +136,7 @@ public class Settings : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireCube(creaturesArea.center, creaturesArea.size);
+        Gizmos.DrawWireCube(CreaturesArea.center, CreaturesArea.size);
     }
 
 #endif

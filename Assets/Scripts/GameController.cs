@@ -58,7 +58,7 @@ public class GameController : MonoBehaviour
         {
             settings.MakeSpritesArray();
             settings.MakeNewCreatureNames();
-            creatureButtonsGrades = new int[settings.creatureSpeciesCount];
+            creatureButtonsGrades = new int[settings.CreatureSpeciesCount];
         }
 
         RecalculateIncomeSpeedAndMaxLevels();
@@ -114,8 +114,8 @@ public class GameController : MonoBehaviour
     {
         GameObject creatureObj = Instantiate(creaturePrefab, creaturesContainer);
         creatureObj.transform.position = new Vector3(
-            Random.Range(settings.creaturesArea.xMin, settings.creaturesArea.xMax),
-            Random.Range(settings.creaturesArea.yMin, settings.creaturesArea.yMax));
+            Random.Range(settings.CreaturesArea.xMin, settings.CreaturesArea.xMax),
+            Random.Range(settings.CreaturesArea.yMin, settings.CreaturesArea.yMax));
         creatureObj.name = "Creature " + level;
 
         var creature = creatureObj.GetComponent<CreatureData>();
@@ -158,7 +158,7 @@ public class GameController : MonoBehaviour
         return;
         SaveData save = new SaveData();
         save.spritesOrder = settings.GetSpritesOrder();
-        save.creatureNames = settings.namesByLevel;
+        //save.creatureNames = settings.namesByLevel;
         save.money = money;
 
         int maxLevel = 0;
@@ -201,8 +201,9 @@ public class GameController : MonoBehaviour
             if (save.creatureNames == null || save.creatureNames.Length != save.spritesOrder.Length)
                 settings.MakeNewCreatureNames();
             else
-                settings.namesByLevel = save.creatureNames;
-
+            {
+                //settings.namesByLevel = save.creatureNames;
+            }
             creatureButtonsGrades = save.creatureShopGrades;
 
             return true;
