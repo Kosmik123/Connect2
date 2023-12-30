@@ -1,18 +1,23 @@
 ﻿#if UNITY_EDITOR
+using System.Text;
 using UnityEditor;
 #endif
 using UnityEngine;
 
-public class RandomNamesGenerator : MonoBehaviour
+[CreateAssetMenu]
+public class RandomNamesGenerator : ScriptableObject
 {
-    public string vowels = "aeiouy";
-    public string consonants = "bcdfghjklmnpqrstvwxz";
-    
-    public int minLength;
-    public int maxLength;
+    [SerializeField]
+    private string vowels = "aeiouy";
+    [SerializeField]
+    private string consonants = "bcdfghjklmnpqrstvwxz";
+
+    [SerializeField]
+    private int minLength;
+    [SerializeField]
+    private int maxLength;
 
     private int length;
-    private int index;
     private bool is2AgoVowel, isLastVowel;
 
     public bool IsConsonant(char c)
@@ -28,31 +33,31 @@ public class RandomNamesGenerator : MonoBehaviour
     public string GetRandomName()
     {
         length = Random.Range(minLength, maxLength + 1);
-        index = 0;
-        string name = "";
 
-        name += GetRandomLetter(out is2AgoVowel);
-        name += GetRandomLetter(out isLastVowel);
-        while(index < length)
+        var builder = new StringBuilder();
+
+        builder.Append(GetRandomLetter(out is2AgoVowel));
+        builder.Append(GetRandomLetter(out isLastVowel));
+        
+        for (int index = 0; index < length; index++)
         {
             if(is2AgoVowel && isLastVowel)
             {
                 is2AgoVowel = isLastVowel;
-                name += GetRandomLetterFrom(consonants, out isLastVowel);
+                builder.Append(GetRandomLetterFrom(consonants, out isLastVowel));
             }
             else if(is2AgoVowel != isLastVowel)
             {
                 is2AgoVowel = isLastVowel;
-                name += GetRandomLetter(out isLastVowel);
+                builder.Append(GetRandomLetter(out isLastVowel));
             }
             else
             {
                 is2AgoVowel = isLastVowel;
-                name += GetRandomLetterFrom(vowels, out isLastVowel);
+                builder.Append(GetRandomLetterFrom(vowels, out isLastVowel));
             }
-            index++;
         }
-        return name;
+        return builder.ToString();
     }
 
     private string GetRandomLetterFrom(string set, out bool isVowel)
@@ -79,8 +84,8 @@ public class RandomNamesGenerator : MonoBehaviour
             DrawDefaultInspector();
             if (GUILayout.Button("Test Generate Name"))
             {
-                RandomNamesGenerator gen = target as RandomNamesGenerator;
-                Debug.Log(gen.GetRandomName());
+                var generator = target as RandomNamesGenerator;
+                Debug.Log(generator.GetRandomName());
             }
         }
     }

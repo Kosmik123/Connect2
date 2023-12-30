@@ -629,7 +629,6 @@ GameObject:
   - component: {fileID: 1414657423}
   - component: {fileID: 1414657424}
   - component: {fileID: 1414657422}
-  - component: {fileID: 1414657425}
   m_Layer: 0
   m_Name: GAME CONTROLLER
   m_TagString: Untagged
@@ -650,6 +649,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: ad748a3b463a45346b169cc4057a573f, type: 2}
+  randomNamesGenerator: {fileID: 11400000, guid: 1926ecdd54125c541ade616aef56014b,
+    type: 2}
   creatureSpeciesCount: 0
   creaturesArea:
     serializedVersion: 2
@@ -721,22 +722,6 @@ MonoBehaviour:
   creatures: []
   maxCreatureLevel: 0
   unlockedCreatures: 0
---- !u!114 &1414657425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414657421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a562dc279d84ae94e97efe41221fff15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vowels: aeiouy
-  consonants: bcdfghjklmnprstvwxz
-  minLength: 5
-  maxLength: 12
 --- !u!850595691 &1543596277
 LightingSettings:
   m_ObjectHideFlags: 0

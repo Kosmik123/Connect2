@@ -5,6 +5,8 @@ public class Settings : MonoBehaviour
 {
     [SerializeField]
     private CreaturesSettings settings;
+    [SerializeField]
+    private RandomNamesGenerator randomNamesGenerator;
 
     [Header("Creatures")]
     public int creatureSpeciesCount;
@@ -76,11 +78,10 @@ public class Settings : MonoBehaviour
     public void MakeNewCreatureNames()
     {
         namesByLevel = new string[spritesByLevel.Length];
-        RandomNamesGenerator gen = GetComponent<RandomNamesGenerator>();
 
-        for(int lv = 0; lv < namesByLevel.Length; lv++)
+        for (int lv = 0; lv < namesByLevel.Length; lv++)
         {
-            string name = gen.GetRandomName();
+            string name = randomNamesGenerator.GetRandomName();
             namesByLevel[lv] = name[0].ToString().ToUpper() + name.Substring(1);
         }
     }
