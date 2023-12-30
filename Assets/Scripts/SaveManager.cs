@@ -5,32 +5,33 @@ using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 
-public class SaveManager : MonoBehaviour
+public static class SaveManager
 {
-    public string savefileName;
-
-    private BinaryFormatter formatter;
-
-    public void WriteSaveFile(string contents)
+    private static string GetFilepath(string savefileName)
     {
-        string filepath = Application.persistentDataPath + "/" + savefileName;
+        return Application.persistentDataPath + "/" + savefileName;
+    }
+
+    public static void WriteSaveFile(string contents, string savefileName)
+    {
+        string filepath = GetFilepath(savefileName);
         File.WriteAllText(filepath, contents);
     }
 
-    public void WriteSaveFile(SaveData data)
+    public static void WriteSaveFile<T>(T data, string savefileName)
     {
-        string filepath = Application.persistentDataPath + "/" + savefileName;
+        string filepath = GetFilepath(savefileName);
         FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate);
-        formatter = new BinaryFormatter();
+        BinaryFormatter formatter = new BinaryFormatter();
 
         try
         {
-            Debug.Log("Serializuje plik " + filepath);
+            Debug.Log("Serializing " + filepath);
             formatter.Serialize(fs, data);
         }
         catch (SerializationException e)
         {
-            Debug.LogError("Save failded");
+            Debug.LogError("Save failded! " + e);
             throw;
         }
         finally
@@ -39,30 +40,30 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    public string ReadSaveFileAsString()
+    public static string ReadSaveFileAsString(string savefileName)
     {
-        string filepath = Application.persistentDataPath + "/" + savefileName;
+        string filepath = GetFilepath(savefileName);
         if (File.Exists(filepath))
         {
             return File.ReadAllText(filepath);
         }
-        return "0";
+        return "";
     }
 
-    public SaveData ReadSaveFile()
+    public static T ReadSaveFile<T>(string savefileName)
     {
-        string filepath = Application.persistentDataPath + "/" + savefileName;
+        string filepath = GetFilepath(savefileName);
         FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate);
-        formatter = new BinaryFormatter();
-        SaveData data = null;
+        BinaryFormatter formatter = new BinaryFormatter();
+        T data = default;
 
-        try 
-        { 
-            data = (SaveData)formatter.Deserialize(fs);
+        try
+        {
+            data = (T)formatter.Deserialize(fs);
         }
         catch (SerializationException e)
         {
-            Debug.Log("Błąd w czasie wczytywania gry. Restart");
+            Debug.LogWarning("Loading error! " + e);
         }
         finally
         {
@@ -71,10 +72,7 @@ public class SaveManager : MonoBehaviour
 
         return data;
     }
-
 }
-
-
 
 [System.Serializable]
 public class SaveData

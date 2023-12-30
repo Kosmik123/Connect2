@@ -42,6 +42,11 @@ public class UIController : MonoBehaviour
     {
         moneyIndicator.text = AlteredStringForm(money) + Money.symbol;
         speedIndicator.text = AlteredStringForm(incomeSpeed) + Money.symbol + "/s";
+
+        if (congratsWindow.gameObject.activeInHierarchy)
+            if (Input.GetMouseButton(0))
+                HideWindow(congratsWindow);
+
     }
 
     public void ShowIncome(decimal income, Vector3 position)

@@ -16,6 +16,10 @@ public class Buyable
 public class BuyableCreature : Buyable
 {
     public int creatureLevel;
+    public BuyableCreature(int level)
+    {
+        creatureLevel = level;
+    }
 }
 
 [System.Serializable]

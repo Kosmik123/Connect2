@@ -132,8 +132,15 @@ public class Money
             return 0;
 
         decimal result = 1;
-        for (int i = 0; i < power; i++)
-            result *= baseNum;
+        try
+        {
+            for (int i = 0; i < power; i++)
+                result *= baseNum;
+        }
+        catch(System.OverflowException oe)
+        {
+            return decimal.MaxValue;
+        }
 
         return result;
     }

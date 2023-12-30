@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class Window : MonoBehaviour
@@ -15,14 +16,10 @@ public class ShopWindowController : Window
 {
 
     [Header("To Link")]
-    public RectTransform buttonsContainer;
+    public  GridLayoutGroup buttonsContainer;
 
     [Header("Prefabs")]
     public GameObject buttonPrefab;
-
-    [Header("Properties")]
-    public float startingHeight = -200;
-    public float buttonsDistance = -350;
 
     [Header("States")]
     public int unlockedButtons = 0;
@@ -41,26 +38,28 @@ public class ShopWindowController : Window
 
     public override void Refresh()
     {
-        buttonsContainer.sizeDelta = new Vector2(
-            buttonsContainer.sizeDelta.x,
-            unlockedButtons * Mathf.Abs(buttonsDistance) + Mathf.Abs(0.2f * startingHeight));
-        buttonsContainer.localPosition = -buttonsContainer.sizeDelta.y * Vector3.down;
+        RectTransform buttonsContainerTransform = (RectTransform)buttonsContainer.transform;
+        buttonsContainerTransform.sizeDelta = new Vector2(
+            buttonsContainerTransform.sizeDelta.x,
+            unlockedButtons * (buttonsContainer.cellSize.y + buttonsContainer.spacing.y));
+        buttonsContainer.transform.localPosition = -buttonsContainerTransform.sizeDelta.y * Vector3.down;
 
         for (int i = 0; i < buttons.Length; i++)
         {
-            buttons[i].transform.localPosition = new Vector3(0, buttonsContainer.rect.yMax + startingHeight + i * buttonsDistance, 0);
+            //buttons[i].transform.localPosition = new Vector3(0, buttonsContainer.rect.yMax + startingHeight + i * buttonsDistance, 0);
             buttons[i].gameObject.SetActive(i < unlockedButtons);
             buttons[i].Refresh();
         }
+        Debug.Log("New scroll view height = {$buttonsContainerTransform.sizeDelta.y}");
     }
 
     private void CreateNewButton(int buttonIndex, Buyable product)
     {
-        var button = Instantiate(buttonPrefab, buttonsContainer);
+        var button = Instantiate(buttonPrefab, buttonsContainer.transform);
         button.name = "Product Button " + buttonIndex;
         BuyButtonController buyButton = button.GetComponent<BuyButtonController>();
         buyButton.product = product;
-        buyButton.transform.localPosition = new Vector3(0, startingHeight + buttonIndex * buttonsDistance, 0);
+        //buyButton.transform.localPosition = new Vector3(0, startingHeight + buttonIndex * buttonsDistance, 0);
         buttons[buttonIndex] = buyButton;
         buyButton.Refresh();
     }

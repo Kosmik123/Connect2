@@ -13,9 +13,7 @@ public class RandomNamesGenerator : MonoBehaviour
 
     private int length;
     private int index;
-
     private bool is2AgoVowel, isLastVowel;
-
 
     public bool IsConsonant(char c)
     {
@@ -69,7 +67,6 @@ public class RandomNamesGenerator : MonoBehaviour
         int opt = Random.Range(0, 2);
         if(opt == 0)
             return GetRandomLetterFrom(vowels, out isVowel);
-        
         return GetRandomLetterFrom(consonants, out isVowel);
     }
 
@@ -80,7 +77,7 @@ public class RandomNamesGenerator : MonoBehaviour
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            if (GUILayout.Button("Generate Name"))
+            if (GUILayout.Button("Test Generate Name"))
             {
                 RandomNamesGenerator gen = target as RandomNamesGenerator;
                 Debug.Log(gen.GetRandomName());

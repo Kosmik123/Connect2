@@ -11,7 +11,8 @@ public class GameController : MonoBehaviour
     public GameObject creaturePrefab;
     public Transform creaturesContainer;
 
-    private SaveManager saveManager;
+    public string saveName;
+
     private UIController ui;
     private Settings settings;
 
@@ -31,7 +32,6 @@ public class GameController : MonoBehaviour
     {
         main = this;
         settings = Settings.main;
-        saveManager = GetComponent<SaveManager>();
     }
 
     void Start()
@@ -167,12 +167,12 @@ public class GameController : MonoBehaviour
         save.creatures = creaturesCounts;
         save.creatureShopGrades = ui.creaturesWindow.GetButtonsGrades();
 
-        saveManager.WriteSaveFile(save);
+        SaveManager.WriteSaveFile(save, saveName);
     }
 
     public bool LoadGame()
     {
-        SaveData save = saveManager.ReadSaveFile();
+        SaveData save = SaveManager.ReadSaveFile<SaveData>(saveName);
         if (save != null)
         {
             money = save.money;
@@ -236,23 +236,19 @@ public class GameController : MonoBehaviour
 
         for (int lv = 0; lv < settings.creatureSpeciesCount; lv++)
         {
-            Buyable prod = new BuyableCreature()
+            Buyable prod = new BuyableCreature(lv)
             {
-                creatureLevel = lv
+                sprite = creatureSprites[lv],
+                name = settings.namesByLevel[lv],
+
+                initialPrice = decimal.Round(Money.DecimalPow(2.2M, lv) + lv),
+                priceAdd = 1 + lv,
+                priceMultiplier = 1.2M
             };
-
-            prod.sprite = creatureSprites[lv];
-
-            prod.name = settings.namesByLevel[lv];
-            prod.description = prod.name + " gives you " + 
-                UIController.AlteredStringForm(GetIncomeSpeed(lv)) + Money.symbol + 
+            prod.description = prod.name + " gives you " +
+                UIController.AlteredStringForm(GetIncomeSpeed(lv)) + Money.symbol +
                 "/s and " + UIController.AlteredStringForm(GetIncome(lv)) + Money.symbol +
                 " for a click.";
-
-            prod.initialPrice = Money.DecimalPow(2, lv) + lv;
-            prod.priceAdd = 1 + lv;
-            prod.priceMultiplier = 1.2M;
-
             ui.creaturesWindow.buyables[lv] = prod;
         }
     }
