@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(CreatureData))]
 public class CreatureController : MonoBehaviour
@@ -9,26 +7,29 @@ public class CreatureController : MonoBehaviour
     public static Rect movementRange;
     public static bool canCreturesBeMoved = true;
 
-    //TO LINK
-    [HideInInspector]
-    public CreatureData creature;
+    private CreatureData creature;
     private Animator animator;
     private GameController gameController;
 
     [Header("Properties")]
-    [Range(0,1)]
-    public float moveSpeed;
-    public float fusionRange;
+    [SerializeField, Range(0,1)]
+    private float moveSpeed;
+    [SerializeField]
+    private float fusionRange;
     
     [Header("Movement States")]
-    public Vector3 targetPosition;
+    [SerializeField]
+    private Vector3 targetPosition;
 
     [Header("States")]
-    public bool isDragged;
+    [SerializeField]
+    private bool isDragged;
+    [SerializeField]
     private Vector3 relativePos;
-    public Collider2D[] touchedColliders = new Collider2D[1];
+    private Collider2D[] touchedColliders = new Collider2D[1];
 
-    public bool isConnecting;
+    [SerializeField]
+    private bool isConnecting;
 
     private void Awake()
     {
@@ -44,13 +45,13 @@ public class CreatureController : MonoBehaviour
 
     void Update()
     {
-        if (creature.isMoving)
+        if (creature.IsMoving)
             DoMove();
 
         if (isDragged)
             DoDrag();
 
-        animator.SetBool("Moving", creature.isMoving);
+        animator.SetBool("Moving", creature.IsMoving);
     }
 
     IEnumerator MoveRandomlyCo()
@@ -58,7 +59,7 @@ public class CreatureController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(2f, 8f));
-            if(!creature.isMoving && !isDragged && creature.level > 0)
+            if(!creature.IsMoving && !isDragged && creature.Level > 0)
                 StartRandomMove();
         }
     }
@@ -68,13 +69,13 @@ public class CreatureController : MonoBehaviour
         targetPosition = new Vector3(
             Random.Range(movementRange.xMin, movementRange.xMax),
             Random.Range(movementRange.yMin, movementRange.yMax));
-        creature.isMoving = true;
+        creature.IsMoving = true;
     }
 
     public void StartMoveToTarget(Vector3 targetPos)
     {
         targetPosition = targetPos;
-        creature.isMoving = true;
+        creature.IsMoving = true;
     }
 
 
@@ -82,7 +83,7 @@ public class CreatureController : MonoBehaviour
     {
         transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed);
         if ((transform.position - targetPosition).sqrMagnitude < 0.1f)
-            creature.isMoving = false;
+            creature.IsMoving = false;
     }
 
     void DoDrag()
@@ -99,7 +100,7 @@ public class CreatureController : MonoBehaviour
         {
             relativePos = transform.position -
             Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            creature.isMoving = false;
+            creature.IsMoving = false;
             isDragged = true;
         }
     }
@@ -108,7 +109,7 @@ public class CreatureController : MonoBehaviour
     {
         if (canCreturesBeMoved)
         {
-            creature.isMoving = false;
+            creature.IsMoving = false;
             gameController.AddMoneyFromCreature(creature);
             animator.SetTrigger("Shake");
         }
@@ -124,14 +125,14 @@ public class CreatureController : MonoBehaviour
             {
                 for (int i = 0; i < touchedColliders.Length; i++)
                 {
-                    if (touchedColliders[i] != null && touchedColliders[i] != creature.collider)
+                    if (touchedColliders[i] != null && touchedColliders[i] != creature.GetComponent<Collider>())
                     {
                         var otherCreature = touchedColliders[i].GetComponent<CreatureData>();
-                        if (otherCreature != null && otherCreature.level == creature.level)
+                        if (otherCreature != null && otherCreature.Level == creature.Level)
                         {
                             otherCreature.LevelUp();
-                            otherCreature.gameObject.name = "Creature " + otherCreature.level;
-                            gameController.CheckCongratulations(otherCreature.level);
+                            otherCreature.gameObject.name = "Creature " + otherCreature.Level;
+                            gameController.CheckCongratulations(otherCreature.Level);
 
                             gameController.creatures.Remove(creature);
                             Destroy(gameObject);

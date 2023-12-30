@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    public static UIController main;
-
     Settings settings;
 
     [Header("To Link")]
@@ -21,16 +17,9 @@ public class UIController : MonoBehaviour
     public ShopWindowController creaturesWindow;
     public CongratsWindow congratsWindow;
 
-
     [Header("Properties")]
-
     public decimal money, incomeSpeed;
     public decimal price;
-
-    private void Awake()
-    {
-        main = this;
-    }
 
     void Start()
     {

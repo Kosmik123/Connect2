@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using NaughtyAttributes.Test;
 using UnityEngine;
 
 public class CreatureData : MonoBehaviour
@@ -10,20 +9,36 @@ public class CreatureData : MonoBehaviour
     private Settings settings;
 
     [Header("To Link")]
-    public new SpriteRenderer renderer;
-    [HideInInspector]
-    public new Collider2D collider;
+    [SerializeField]
+    private new SpriteRenderer renderer;
+    [SerializeField]
+    private new Collider2D collider;
 
     [Header("States")]
-    public int level; // from 0 to maxLevel
-    public bool isMoving;
+    [SerializeField]
+    private int level; // from 0 to maxLevel
+    public int Level => level;
 
+    [SerializeField]
+    private bool isMoving;
+    public bool IsMoving
+    {
+        get => isMoving;
+        set 
+        { 
+            isMoving = value; 
+        }
+    }
 
     private void Awake()
     {
         collider = GetComponent<Collider2D>();
     }
 
+    public void Init(int level)
+    {
+        this.level = level;
+    }
 
     void Start()
     {

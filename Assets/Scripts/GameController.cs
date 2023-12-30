@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
 
     public string saveName;
 
+    [SerializeField]
     private UIController ui;
     private Settings settings;
 
@@ -36,8 +37,6 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        ui = UIController.main;
-
         bool isGameLoaded = LoadGame();
         if(!isGameLoaded)
         {
@@ -104,31 +103,31 @@ public class GameController : MonoBehaviour
     }
 
 
-    public void CreateCreature(int lv)
+    public void CreateCreature(int level)
     {
         GameObject creatureObj = Instantiate(creaturePrefab, creaturesContainer);
         creatureObj.transform.position = new Vector3(
             Random.Range(settings.creaturesArea.xMin, settings.creaturesArea.xMax),
             Random.Range(settings.creaturesArea.yMin, settings.creaturesArea.yMax));
-        creatureObj.name = "Creature " + lv;
+        creatureObj.name = "Creature " + level;
 
         var creature = creatureObj.GetComponent<CreatureData>();
+        creature.Init(level);
+
         creatures.Add(creature);
-        creature.level = lv;
-        maxCreatureLevel = Mathf.Max(maxCreatureLevel, lv);
+        maxCreatureLevel = Mathf.Max(maxCreatureLevel, level);
     }
 
     public void AddMoneyFromCreature(CreatureData creature)
     {
-        decimal income = GetIncome(creature.level);
+        decimal income = GetIncome(creature.Level);
         ui.ShowIncome(income, creature.transform.position);
         money += (income);
     }
 
     public  decimal GetIncome(int creatureLevel)
     {
-        return (Money.DecimalPow(2, creatureLevel) + creatureLevel
-            + globalBonus);
+        return (Money.DecimalPow(2, creatureLevel) + creatureLevel + globalBonus);
     }
 
     public decimal GetIncomeSpeed(int creatureLevel)
@@ -141,8 +140,8 @@ public class GameController : MonoBehaviour
         incomeSpeed = 0;
         foreach (var creature in creatures)
         { 
-            incomeSpeed += GetIncomeSpeed(creature.level);
-            maxCreatureLevel = Mathf.Max(maxCreatureLevel, creature.level);
+            incomeSpeed += GetIncomeSpeed(creature.Level);
+            maxCreatureLevel = Mathf.Max(maxCreatureLevel, creature.Level);
         }
         ui.creaturesWindow.unlockedButtons = settings.buyableLevelsUnlocked[maxCreatureLevel] + 1;
     }
@@ -157,13 +156,13 @@ public class GameController : MonoBehaviour
         int maxLevel = 0;
         foreach(var creature in creatures)
         {
-            if (creature.level > maxLevel)
-                maxLevel = creature.level;
+            if (creature.Level > maxLevel)
+                maxLevel = creature.Level;
         }
 
         int[] creaturesCounts = new int[maxLevel + 1];
         foreach (var creature in creatures)
-            creaturesCounts[creature.level]++;
+            creaturesCounts[creature.Level]++;
         save.creatures = creaturesCounts;
         save.creatureShopGrades = ui.creaturesWindow.GetButtonsGrades();
 
