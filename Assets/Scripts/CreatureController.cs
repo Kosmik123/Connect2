@@ -8,6 +8,7 @@ public class CreatureController : MonoBehaviour
     public static bool canCreturesBeMoved = true;
 
     private CreatureData creature;
+    public CreatureData Creature => creature;
     private Animator animator;
     private GameController gameController;
 
@@ -125,9 +126,10 @@ public class CreatureController : MonoBehaviour
             {
                 for (int i = 0; i < touchedColliders.Length; i++)
                 {
-                    if (touchedColliders[i] != null && touchedColliders[i] != creature.GetComponent<Collider>())
+                    var collider = touchedColliders[i];
+                    if (collider && collider != creature.Collider)
                     {
-                        var otherCreature = touchedColliders[i].GetComponent<CreatureData>();
+                        var otherCreature = collider.GetComponent<CreatureData>();
                         if (otherCreature != null && otherCreature.Level == creature.Level)
                         {
                             otherCreature.LevelUp();

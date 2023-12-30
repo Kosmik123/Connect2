@@ -13,6 +13,7 @@ public class CreatureData : MonoBehaviour
     private new SpriteRenderer renderer;
     [SerializeField]
     private new Collider2D collider;
+    public Collider2D Collider => collider;
 
     [Header("States")]
     [SerializeField]
