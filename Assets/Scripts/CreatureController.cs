@@ -7,8 +7,17 @@ public class CreatureController : MonoBehaviour
     public static Rect movementRange;
     public static bool canCreturesBeMoved = true;
 
-    private CreatureData creature;
-    public CreatureData Creature => creature;
+    private CreatureData _creature;
+    public CreatureData Creature
+    {
+        get
+        {
+            if (_creature == null)
+                _creature = GetComponent<CreatureData>();
+            return _creature;
+        }
+    }
+
     private Animator animator;
     private GameController gameController;
 
@@ -35,7 +44,6 @@ public class CreatureController : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        creature = GetComponent<CreatureData>();
     }
 
     void Start()
@@ -46,13 +54,13 @@ public class CreatureController : MonoBehaviour
 
     void Update()
     {
-        if (creature.IsMoving)
+        if (Creature.IsMoving)
             DoMove();
 
         if (isDragged)
             DoDrag();
 
-        animator.SetBool("Moving", creature.IsMoving);
+        animator.SetBool("Moving", Creature.IsMoving);
     }
 
     IEnumerator MoveRandomlyCo()
@@ -60,7 +68,7 @@ public class CreatureController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(2f, 8f));
-            if(!creature.IsMoving && !isDragged && creature.Level > 0)
+            if(!Creature.IsMoving && !isDragged && Creature.Level > 0)
                 StartRandomMove();
         }
     }
@@ -70,13 +78,13 @@ public class CreatureController : MonoBehaviour
         targetPosition = new Vector3(
             Random.Range(movementRange.xMin, movementRange.xMax),
             Random.Range(movementRange.yMin, movementRange.yMax));
-        creature.IsMoving = true;
+        Creature.IsMoving = true;
     }
 
     public void StartMoveToTarget(Vector3 targetPos)
     {
         targetPosition = targetPos;
-        creature.IsMoving = true;
+        Creature.IsMoving = true;
     }
 
 
@@ -84,7 +92,7 @@ public class CreatureController : MonoBehaviour
     {
         transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed);
         if ((transform.position - targetPosition).sqrMagnitude < 0.1f)
-            creature.IsMoving = false;
+            Creature.IsMoving = false;
     }
 
     void DoDrag()
@@ -101,7 +109,7 @@ public class CreatureController : MonoBehaviour
         {
             relativePos = transform.position -
             Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            creature.IsMoving = false;
+            Creature.IsMoving = false;
             isDragged = true;
         }
     }
@@ -110,8 +118,8 @@ public class CreatureController : MonoBehaviour
     {
         if (canCreturesBeMoved)
         {
-            creature.IsMoving = false;
-            gameController.AddMoneyFromCreature(creature);
+            Creature.IsMoving = false;
+            gameController.AddMoneyFromCreature(Creature);
             animator.SetTrigger("Shake");
         }
     }
@@ -127,16 +135,16 @@ public class CreatureController : MonoBehaviour
                 for (int i = 0; i < touchedColliders.Length; i++)
                 {
                     var collider = touchedColliders[i];
-                    if (collider && collider != creature.Collider)
+                    if (collider && collider != Creature.Collider)
                     {
                         var otherCreature = collider.GetComponent<CreatureData>();
-                        if (otherCreature != null && otherCreature.Level == creature.Level)
+                        if (otherCreature != null && otherCreature.Level == Creature.Level)
                         {
                             otherCreature.LevelUp();
                             otherCreature.gameObject.name = "Creature " + otherCreature.Level;
                             gameController.UnlockCreature(otherCreature.Level);
 
-                            gameController.RemoveCreature(creature);
+                            gameController.RemoveCreature(Creature);
                             Destroy(gameObject);
                             break;
                         }
