@@ -10,8 +10,10 @@ public class GameController : MonoBehaviour
     public static GameController main;    
 
     [Header("To Link")]
-    public GameObject creaturePrefab;
-    public Transform creaturesContainer;
+    [SerializeField]
+    private GameObject creaturePrefab;
+    [SerializeField]
+    private Transform creaturesContainer;
 
     public string saveName;
 
@@ -20,16 +22,29 @@ public class GameController : MonoBehaviour
     public Settings Settings => settings;
 
     [Header("States")]
-    public decimal money, incomeSpeed;
-    public List<CreatureData> creatures = new List<CreatureData>();
+    [SerializeField]
+    private decimal money;
+    public decimal CurrentMoney => money;
 
-    public int maxCreatureLevel, unlockedCreatures;
+    [SerializeField]
+    private decimal incomeSpeed;
+    public decimal IncomeSpeed => incomeSpeed;
+
+    [SerializeField]
+    private List<CreatureData> creatures = new List<CreatureData>();
+    public IReadOnlyList<CreatureData> Creatures => creatures;
+
+    [SerializeField]
+    private int maxCreatureLevel;
+    [SerializeField]
+    private int unlockedCreatures;
 
     private int[] creatureButtonsGrades;
     public IReadOnlyList<int> CreatureButtonsGrades => creatureButtonsGrades;
 
     [Header("Bonuses")]
-    public decimal globalBonus;
+    [SerializeField]
+    private decimal globalBonus;
 
     private void Awake()
     {
@@ -69,6 +84,10 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void RemoveCreature(CreatureData creature)
+    {
+        creatures.Remove(creature);
+    }
 
     public bool BuyProduct(Buyable product, decimal price)
     {
@@ -115,7 +134,7 @@ public class GameController : MonoBehaviour
 
     public  decimal GetIncome(int creatureLevel)
     {
-        return (Money.DecimalPow(2, creatureLevel) + creatureLevel + globalBonus);
+        return Money.DecimalPow(2, creatureLevel) + creatureLevel + globalBonus;
     }
 
     public decimal GetIncomeSpeed(int creatureLevel)

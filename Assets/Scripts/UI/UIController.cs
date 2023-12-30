@@ -71,8 +71,8 @@ public class UIController : MonoBehaviour
             if (Input.GetMouseButton(0))
                 HideWindow(congratsWindow);
 
-        money = game.money;
-        incomeSpeed = game.incomeSpeed;
+        money = game.CurrentMoney;
+        incomeSpeed = game.IncomeSpeed;
     }
 
     private void ShowIncome(decimal income, Vector3 position)

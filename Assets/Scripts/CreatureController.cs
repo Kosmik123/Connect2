@@ -136,7 +136,7 @@ public class CreatureController : MonoBehaviour
                             otherCreature.gameObject.name = "Creature " + otherCreature.Level;
                             gameController.UnlockCreature(otherCreature.Level);
 
-                            gameController.creatures.Remove(creature);
+                            gameController.RemoveCreature(creature);
                             Destroy(gameObject);
                             break;
                         }
