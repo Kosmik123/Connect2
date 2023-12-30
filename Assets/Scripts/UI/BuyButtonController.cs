@@ -8,31 +8,47 @@ using UnityEngine.UI;
 public class BuyButtonController : MonoBehaviour
 {
     [Header("To Link")]
-    public Text nameText;
-    public Text priceText;
-    public Text descriptionText;
-    public Image graphicImage;
+    [SerializeField]
+    private Text nameText;
+    [SerializeField]
+    private Text priceText;
+    [SerializeField]
+    private Text descriptionText;
+    [SerializeField]
+    private Image graphicImage;
     private GameController gameController;
 
     [Header("Settings")]
-    public Buyable product;
+    [SerializeField]
+    private Buyable product;
+    public Buyable Product
+    {
+        get => product;
+        set => product = value;
+    }
 
     [Header("States")]
-    public int grade = 0;
-    public decimal price;
+    [SerializeField]
+    private int grade = 0;
+    public int Grade 
+    { 
+        get => grade; 
+        set => grade = value; 
+    }
+
+    [SerializeField]
+    private decimal price;
 
 
     private void Start()
     {
         gameController = GameController.main;
-
     }
-
 
     public void Refresh()
     {
-        price = decimal.Round(Money.DecimalPow(product.priceMultiplier, grade) *
-            (product.initialPrice + grade * product.priceAdd) );
+        price = decimal.Round(Money.DecimalPow(product.priceMultiplier, Grade) *
+            (product.initialPrice + Grade * product.priceAdd) );
         priceText.text = UIController.AlteredStringForm(price) + Money.symbol;
 
         nameText.text = product.name;
@@ -45,7 +61,7 @@ public class BuyButtonController : MonoBehaviour
         bool success = gameController.BuyProduct(product, price);
         if(success)
         {
-            grade++;
+            Grade++;
             Refresh();
             gameController.RecalculateIncomeSpeedAndMaxLevels();
         }

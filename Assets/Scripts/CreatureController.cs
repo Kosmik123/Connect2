@@ -134,7 +134,7 @@ public class CreatureController : MonoBehaviour
                         {
                             otherCreature.LevelUp();
                             otherCreature.gameObject.name = "Creature " + otherCreature.Level;
-                            gameController.CheckCongratulations(otherCreature.Level);
+                            gameController.UnlockCreature(otherCreature.Level);
 
                             gameController.creatures.Remove(creature);
                             Destroy(gameObject);

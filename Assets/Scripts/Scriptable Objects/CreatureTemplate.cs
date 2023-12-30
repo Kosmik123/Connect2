@@ -3,13 +3,15 @@
 [CreateAssetMenu(fileName = "New Creatures", menuName = "Creature")]
 public class CreatureTemplate : ScriptableObject
 {
-    public int level;
-    public Sprite sprite;
+    [SerializeField]
+    private int level;
+    [SerializeField]
+    private Sprite sprite;
 
-    [Range(0,1)]
-    [Header("0-only auto-income, 1-only click income")]
-    public float incomeModifier = 0.5f;
+    [SerializeField, Range(0, 1), Tooltip("0-only auto-income, 1-only click income")]
+    private float incomeModifier = 0.5f;
 
-    public CreatureTemplate[] nextForms = new CreatureTemplate[2];
+    [SerializeField]
+    private CreatureTemplate[] nextForms = new CreatureTemplate[2];
 
 }

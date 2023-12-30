@@ -60,6 +60,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -142,6 +144,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 1, a: 0.41960785}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -164,13 +168,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8488464788191719685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21e724b28959de94c945fefcd27af5f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c807870f2eb9e64597d7d42387d9363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   buttonsContainer: {fileID: 6129739317789847822}
   buttonPrefab: {fileID: 1377540229011615805, guid: e250205151c83fd4f8d3a15d039014dc,
     type: 3}
-  unlockedButtons: 5
+  unlockedButtons: 1
   buttons: []
   buyables: []
 --- !u!1 &8488464788690516706
@@ -266,6 +270,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

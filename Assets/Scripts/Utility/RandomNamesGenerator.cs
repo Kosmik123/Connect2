@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 public class RandomNamesGenerator : MonoBehaviour
@@ -40,7 +40,7 @@ public class RandomNamesGenerator : MonoBehaviour
                 is2AgoVowel = isLastVowel;
                 name += GetRandomLetterFrom(consonants, out isLastVowel);
             }
-            else if(is2AgoVowel ^ isLastVowel)
+            else if(is2AgoVowel != isLastVowel)
             {
                 is2AgoVowel = isLastVowel;
                 name += GetRandomLetter(out isLastVowel);

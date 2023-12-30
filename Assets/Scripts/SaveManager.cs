@@ -20,6 +20,7 @@ public static class SaveManager
 
     public static void WriteSaveFile<T>(T data, string savefileName)
     {
+        return;
         string filepath = GetFilepath(savefileName);
         FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate);
         BinaryFormatter formatter = new BinaryFormatter();
@@ -52,6 +53,7 @@ public static class SaveManager
 
     public static T ReadSaveFile<T>(string savefileName)
     {
+        return default(T);
         string filepath = GetFilepath(savefileName);
         FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate);
         BinaryFormatter formatter = new BinaryFormatter();

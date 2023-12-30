@@ -1,27 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class CongratsWindow : Window
 {
-    public Settings settings;
-
     [Header("To Link")]
-    public Text creatureName;
-    public Image creatureSprite;
+    [SerializeField]
+    private Text creatureName;
+    [SerializeField]
+    private Image creatureSprite;
 
     [Header("Properties")]
-    public int creatureLevel;
-
-    private void Start()
+    [SerializeField]
+    private int creatureLevel;
+    public int CreatureLevel
     {
-        settings = Settings.main;
+        get => creatureLevel;
+        set => creatureLevel = value;
     }
 
     public override void Refresh()
     {
-        settings = Settings.main;
+        var settings = GameController.main.Settings;
         creatureName.text = settings.namesByLevel[creatureLevel];
         creatureSprite.sprite = settings.spritesByLevel[creatureLevel];
     }

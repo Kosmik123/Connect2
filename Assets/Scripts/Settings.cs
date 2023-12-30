@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Settings : MonoBehaviour
 {
-    public static Settings main;
     [SerializeField]
     private CreaturesSettings settings;
 
@@ -23,7 +21,6 @@ public class Settings : MonoBehaviour
 
     private void Awake()
     {
-        main = this;
         sprites = Resources.LoadAll<Sprite>(textureName);
         creatureSpeciesCount = sprites.Length;
     }

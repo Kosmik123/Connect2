@@ -5,24 +5,20 @@ using UnityEngine.UI;
 
 public class IndicatorController : MonoBehaviour
 {
-    public Vector3 moveVelocity;
-    public float existenceTime;
+    [SerializeField]
+    private Vector3 moveVelocity;
+    [SerializeField] private float existenceTime;
     private Text indicatorText;
-
 
     private float lifetime;
 
-
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         indicatorText = GetComponentInChildren<Text>();
         lifetime = existenceTime;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         transform.position += moveVelocity * Time.deltaTime;
         lifetime -= Time.deltaTime;

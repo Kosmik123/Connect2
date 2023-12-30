@@ -137,7 +137,7 @@ public class Money
             for (int i = 0; i < power; i++)
                 result *= baseNum;
         }
-        catch(System.OverflowException oe)
+        catch (System.OverflowException)
         {
             return decimal.MaxValue;
         }

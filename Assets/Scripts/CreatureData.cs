@@ -1,5 +1,4 @@
-﻿using NaughtyAttributes.Test;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CreatureData : MonoBehaviour
 {
@@ -43,7 +42,7 @@ public class CreatureData : MonoBehaviour
 
     void Start()
     {
-        settings = Settings.main;
+        settings = GameController.main.Settings;
         Refresh();
     }
 

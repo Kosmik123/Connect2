@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,18 +13,37 @@ public class Window : MonoBehaviour
 
 public class ShopWindowController : Window
 {
-
     [Header("To Link")]
-    public  GridLayoutGroup buttonsContainer;
+    [SerializeField]
+    private GridLayoutGroup buttonsContainer;
 
     [Header("Prefabs")]
-    public GameObject buttonPrefab;
+    [SerializeField]
+    private GameObject buttonPrefab;
 
     [Header("States")]
-    public int unlockedButtons = 0;
-    public BuyButtonController[] buttons;
-    public Buyable[] buyables;
+    [SerializeField]
+    private int unlockedButtons = 0;
+    public int UnlockedButtons
+    {
+        get => unlockedButtons;
+        set => unlockedButtons = value;
+    }
 
+    [SerializeField]
+    private BuyButtonController[] buttons;
+    [SerializeField]
+    private Buyable[] buyables;
+
+    public void Init(int productsCount)
+    {
+        buyables = new Buyable[productsCount];
+    }
+
+    public void SetProduct(int level, Buyable product)
+    {
+        buyables[level] = product;
+    }
 
     public void CreateButtons()
     {
@@ -50,7 +68,7 @@ public class ShopWindowController : Window
             buttons[i].gameObject.SetActive(i < unlockedButtons);
             buttons[i].Refresh();
         }
-        Debug.Log("New scroll view height = {$buttonsContainerTransform.sizeDelta.y}");
+        Debug.Log($"New scroll view height = {buttonsContainerTransform.sizeDelta.y}");
     }
 
     private void CreateNewButton(int buttonIndex, Buyable product)
@@ -58,7 +76,7 @@ public class ShopWindowController : Window
         var button = Instantiate(buttonPrefab, buttonsContainer.transform);
         button.name = "Product Button " + buttonIndex;
         BuyButtonController buyButton = button.GetComponent<BuyButtonController>();
-        buyButton.product = product;
+        buyButton.Product = product;
         //buyButton.transform.localPosition = new Vector3(0, startingHeight + buttonIndex * buttonsDistance, 0);
         buttons[buttonIndex] = buyButton;
         buyButton.Refresh();
@@ -68,16 +86,16 @@ public class ShopWindowController : Window
     {
         int[] grades = new int[buttons.Length];
         for(int i = 0; i < buttons.Length; i++)
-            grades[i] = buttons[i].grade;
+            grades[i] = buttons[i].Grade;
 
         return grades;
     }
 
-    public void SetButtonsGrades(int[] grades)
+    public void SetButtonsGrades(IReadOnlyList<int> grades)
     {
-        int len = Mathf.Min(grades.Length, buttons.Length);
+        int len = Mathf.Min(grades.Count, buttons.Length);
         for (int i = 0; i < len; i++)
-            buttons[i].grade = grades[i];
+            buttons[i].Grade = grades[i];
     }
 
 
